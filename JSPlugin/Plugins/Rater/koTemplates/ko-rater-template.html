@@ -1,0 +1,16 @@
+<style type="text/css">
+	.rater ul { list-style-type: none; }
+	.rater li { float: left;background: url('../images/star.png') no-repeat;cursor: pointer;width: 24px;height: 24px;}
+	.rater li.select {background-position: 0 -28px;}
+		.rater a { text-decoration: none;}				
+</style>
+<div class="rater">
+	<ul data-bind="foreach:textList">
+		<!-- click binding should use $parent instead of $root,because $root refers to  
+		view model which is passed to ko.applyBindings method -->
+		<li data-bind="click:function(){$parent.select($index);},event:{'mouseover':function(){$parent.showMsg($index)},'mouseout':function(){$parent.showMsg();}},css:{'select':$index() <= $parent.currentIndex()}">
+			<a href="javascript:;"></a>
+		</li>		
+	</ul>
+	<span class="hidden" data-bind="visible:isShowText,text:selectedText"></span>
+</div>

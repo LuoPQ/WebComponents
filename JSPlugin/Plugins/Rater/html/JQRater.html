@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>jQuery版评分控件</title>
+		<script type="text/javascript" src="../../Lib/jquery-1.10.2.min.js"></script>
+		<style type="text/css">
+			.rater ul { list-style-type: none; }
+			.rater li { float: left;background: url('../images/star.png') no-repeat;cursor: pointer;width: 24px;height: 24px;}
+			.rater li.select {background-position: 0 -28px;}
+			.rater a { text-decoration: none;}	
+			.hidden {display: none;}			
+		</style>
+	</head>
+	<body>
+		<div class="rater">			
+		</div>
+	</body>
+	<script type="text/javascript" src="../js/jquery.rater.js"></script>
+	<script type="text/javascript">
+		$(".rater").rater({
+			maxCount:6,
+			selectedCallBack:function  (star) {
+				console.log("calback:" + star);
+			}
+		});
+	</script>
+</html>

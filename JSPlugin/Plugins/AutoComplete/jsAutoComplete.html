@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>JS自动完成组件</title>
+	<style type="text/css">
+		body,div,input,ul,li{
+			margin: 0;
+			padding: 0;
+		}
+		ul{	list-style-type: none;}
+		.auto-complete-txt{
+			height: 24px;
+			padding: 1px 4px;
+			width: 160px;
+		}		
+		#listContainer{
+			border: 1px solid #aaa;
+			display: none;
+		}
+		.auto-complete-opt{
+			
+		}
+		.auto-complete-opt li{
+			cursor: pointer;
+		}
+		.auto-complete-opt li:hover{
+			background-color: green;
+		}
+		.auto-complete-page{
+
+		}
+		.auto-complete-page li,.auto-complete-page span{
+			float: left;
+			margin:0 5px;
+		}
+		.auto-complete-page li{
+			text-decoration: underline;
+		}
+	</style>
+</head>
+<body>
+	
+	城市：<input id='keyTxt' class="auto-complete-txt" type="text" placeholder="请输入关键字">
+	<div id="listContainer">
+		<ul class="auto-complete-opt" id="list"></ul>	
+		<ul class="auto-complete-page">
+			<span>1</span>
+			<li>2</li>
+			<li>3</li>
+		</ul>	
+	</div>
+	
+	
+
+	<script type="text/javascript" src="../Lib/pq-dom.js"></script>
+	<script type="text/javascript">
+		var $keyTxt = $("#keyTxt");
+	   	var txtSize = $keyTxt.size(true);
+	   	var txtOffset=$keyTxt.offset();
+
+	   	$("#listContainer").css({
+	   		width: txtSize.width,
+	   		position:"relative",	   		
+	   		left:txtOffset.left+"px"//,
+			//top: txtSize.height
+	   	})
+
+	   	var cities = ["北京","上海","广州","厦门","深圳","杭州","天津","成都","长沙","福州","郑州","西安","沈阳","哈尔滨","昆明","武汉","石家庄","南京","重庆","呼和浩特"];
+	   	$keyTxt.on("keyup",function () {
+	   		var key = $keyTxt.val();
+	   		if (key) {
+	   			var reg = new RegExp(key+"+");
+	   			var result = [];
+	   			var html = [];
+	   			for (var i = 0; i < cities.length; i++) {
+	   				if(reg.test(cities[i])){
+   						result.push(cities[i]);   						
+   						html.push("<li>"+cities[i]+"</li>");
+		   			}
+		   		}
+		   		$("#list").html("").append(html.join(""));
+		   		$("#listContainer").show();
+	   		}
+	   		else {
+   				$("#listContainer").hide();
+	   		}	   		
+	   	})
+
+	</script>
+</body>
+</html>

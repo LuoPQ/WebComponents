@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <style>
+        div, input, ul, li { margin: 0; padding: 0; }
+        .autocomplete-txt { width: 150px; padding: 5px; }
+        .autocomplete-opt { width: 160px; border: 1px solid gray; list-style-type: none; }
+            .autocomplete-opt li { cursor: pointer; height: 30px; line-height: 30px; padding: 0 5px; }
+                .autocomplete-opt .select, .autocomplete-opt li:hover { background-color: blue; color: white; }
+    </style>
+</head>
+<body>    
+    <ko-auto-complete params="options:autoCompleteOptions"></ko-auto-complete>
+
+    <script src="/Scripts/knockout-3.2.0.js"></script>
+    <script src="/Scripts/jquery-2.1.3.min.js"></script>
+    <script src="ko.autocomplete.js"></script>
+    <script type="text/html" id="itemTempl">
+        <span style="color:red;font-size:25px" data-bind="text:$data"></span>
+    </script>
+    <script>
+        (function () {
+            function autoVM(params) {
+                var self = this;
+
+                self.autoCompleteOptions = params;
+            };
+            var params = {
+                //remoteDataUrl: "/Data/GetData",
+                allOptions: ["ActionScript", "AppleScript", "Asp", "BASIC", "C", "C++", "Clojure", "COBOL", "ColdFusion", "Erlang", "Fortran", "Groovy", "Haskell", "Java", "JavaScript", "Lisp", "Perl", "PHP", "Python", "Ruby", "Scala", "Scheme"]
+            };
+            ko.applyBindings(new autoVM(params));
+        })();
+    </script>
+</body>
+</html>

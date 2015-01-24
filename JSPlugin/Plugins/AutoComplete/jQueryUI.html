@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <link href="/Content/themes/base/all.css" rel="stylesheet" />
+    <link href="/Content/themes/base/autocomplete.css" rel="stylesheet" />
+    <script src="/Scripts/jquery-2.1.3.min.js"></script>
+    <script src="/Scripts/jquery-ui-1.11.2.min.js"></script>
+</head>
+<body>
+    <div class="ui-widget">
+        <label for="tags">Tags: </label>
+        <input id="tags">
+    </div>
+
+    <div class="ui-widget">
+        <label for="Lang">Lang: </label>
+        <input id="Lang" type="text">
+    </div>
+
+    <div class="ui-widget" style="margin-top:2em; font-family:Arial">
+        Result:
+        <div id="log" style="height: 200px; width: 300px; overflow: auto;" class="ui-widget-content"></div>
+    </div>
+    <script>
+        $(function () {
+            var availableTags = ["ActionScript", "AppleScript", "Asp", "BASIC", "C", "C++", "Clojure", "COBOL", "ColdFusion", "Erlang", "Fortran", "Groovy", "Haskell", "Java", "JavaScript", "Lisp", "Perl", "PHP", "Python", "Ruby", "Scala", "Scheme"];
+            $("#tags").autocomplete({
+                source: availableTags
+            });
+
+            function log(message) {
+                $("<div>").text(message).prependTo("#log");
+                $("#log").scrollTop(0);
+            }
+
+            $("#Lang").autocomplete({
+                source: "/Data/GetData",
+                minLength: 1,
+                select: function (event, ui) {
+                    log(ui.item ?
+                      "Selected: " + ui.item.value + " aka " + ui.item.id :
+                      "Nothing selected, input was " + this.value);
+                }
+            });
+
+        });
+    </script>
+</body>
+</html>
