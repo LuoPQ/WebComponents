@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+    <div id="ele">
+        div层
+        <input type="button" id="btn" value="按钮" />
+    </div>
+    <script>
+        document.getElementById("btn").onclick = function (event) {
+            if (event && event.stopPropagation) {
+                event.stopPropagation();
+            }
+            else {
+                //ie8
+                window.event.cancelBubble = true;
+            }
+            alert("btn clicked")
+        }
+        document.getElementById("ele").onclick = function () {
+            alert("div clicked");
+        }
+        document.onclick = function () {
+            alert("document clicked");
+        }
+        document.body.onclick = function () {
+            alert("body clicked");
+        }
+    </script>
+</body>
+</html>

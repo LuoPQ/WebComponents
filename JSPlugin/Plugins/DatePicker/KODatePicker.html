@@ -22,11 +22,11 @@
     </style>
 </head>
 <body>
-    <input type="text" data-bind="value:selectedText,event:{'focus':showDatePicker}" />
+    <input type="text" data-bind="value:selectedText,event:{'focus':showDatePicker},clickBubble: false" />
     <div class="datepicker" data-bind="visible:datePickerVisible">
         <dl>
             <dt class="month">
-                <a class="month-prev" data-bind="click:prevMonth"></a>
+                <a class="month-prev" data-bind="click:prevMonth,clickBubble: false"></a>
                 <span data-bind="text:currentDateText"></span>
                 <a class="month-next" data-bind="click:nextMonth"></a>
             </dt>
@@ -93,7 +93,6 @@
 
                     var list = [];
                     for (var i = 0; i < firstDay.getDay() ; i++) {
-                        //i这里是负数，所以currentMonth不需要减去1就表示上个月
                         list.push(createKoDate(new Date(currentYear, currentMonth - 1, i), currentMonth));
                     }
                     for (var i = 1; i <= lastDay.getDate() ; i++) {
@@ -141,38 +140,32 @@
                 self.datePickerVisible = ko.observable(true);
 
                 //是否在选择
-                self.isSelecting = ko.observable(false);
-
                 self.showDatePicker = function () {
-                    self.isSelecting(true);
                     self.datePickerVisible(true);
                 }
-                self.hideDatePicker = function () {
+
+                document.onclick = function () {
                     setTimeout(function () {
                         self.datePickerVisible(false);
                     }, 150);
                 }
 
-                //document.onclick = function () {
-                //    self.hideDatePicker();
-                //}
+                self.changeMonth = function (data, event) {
 
-                self.prevMonth = function () {
+                }
+
+                self.prevMonth = function (data, event) {
+                    console.log(data);
+                    console.log(event);
                     var currentDate = self.currentDate();
                     currentDate.setMonth(currentDate.getMonth() - 1);
                     self.currentDate(currentDate);
-                    if (self.isSelecting()) {
-                        return;
-                    }
                 }
 
                 self.nextMonth = function () {
                     var currentDate = self.currentDate();
                     currentDate.setMonth(currentDate.getMonth() + 1);
                     self.currentDate(currentDate);
-                    if (self.isSelecting()) {
-                        return;
-                    }
                 }
 
 
