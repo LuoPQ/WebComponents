@@ -1,0 +1,222 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <style>
+        .dxj-ui-hd { padding: 0; margin: 0 auto; margin-top: 30px; width: 780px; height: 60px; line-height: 60px; background: #3385ff; color: #fff; font-family: "微软雅黑"; font-size: 28px; text-align: center; font-weight: bold; }
+        .dxj-ui-bd { padding: 0; margin: 0 auto; width: 778px; padding-top: 30px; padding-bottom: 30px; overflow: hidden; border: 1px solid #3385ff; }
+            .dxj-ui-bd #tab { padding: 0; margin: 0 auto; width: 720px; overflow: hidden; }
+                .dxj-ui-bd #tab .title { width: 720px; overflow: hidden; border-bottom: 2px solid #3385ff; }
+                    .dxj-ui-bd #tab .title .adder { width: 160px; height: 32px; line-height: 32px; background: #DC143C; color: #fff; font-family: "微软雅黑"; font-size: 14px; text-align: center; font-weight: bold; float: left; cursor: pointer; }
+                    .dxj-ui-bd #tab .title .items { height: 32px; margin-left: 20px; width: 540px; overflow: hidden; float: left; }
+                        .dxj-ui-bd #tab .title .items div { padding: 0; margin-left: 10px; width: 96px; height: 32px; line-height: 32px; background: #3385ff; color: #fff; font-family: arial; font-size: 12px; text-align: center; position: relative; float: left; cursor: pointer; }
+                            .dxj-ui-bd #tab .title .items div span.del { width: 16px; height: 16px; line-height: 16px; display: block; background: #DC143C; position: absolute; right: 0; top: 0; cursor: pointer; }
+                .dxj-ui-bd #tab .content { width: 716px; padding-top: 30px; overflow: hidden; border: 2px solid #3385ff; border-top: 0px; min-height: 130px; text-align: center; }
+                    .dxj-ui-bd #tab .content table { margin: 0 auto; }
+                    .dxj-ui-bd #tab .content div.c { padding-top: 20px; padding-left: 20px; background: #eee; height: 140px; }
+                        .dxj-ui-bd #tab .content div.c .input-content { margin-top: 10px; font-family: arial; font-size: 12px; }
+                .dxj-ui-bd #tab .console-panel { width: 716px; padding-top: 20px; padding-bottom: 20px; overflow: hidden; border: 2px solid #3385ff; border-top: 0px; border-bottom: 2px solid #3385ff; background: #fff; display: none; }
+        .active { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="dxj-ui-hd">
+        大熊君{{bb}} - DXJ UI ------ Tab
+    </div>
+    <div class="dxj-ui-bd">
+        <div id="tab">
+            <div class="title">
+                <div class="adder">
+                    + 添加学生信息
+                </div>
+                <div class="items">
+                    <!--<div><span class="del">X</span>欢迎页</div>
+                    <div><span class="del">X</span>用户管理</div>
+                    <div><span class="del">X</span>Bigbear</div>-->
+                </div>
+            </div>
+            <div class="console-panel">
+
+            </div>
+            <div class="content">
+                <!--<div class="c">
+
+                    <div class="input-content"><span>姓名：</span><input type="text" /></div>
+                    <div class="input-content"><span>备注：</span><textarea></textarea></div>
+
+                </div>    <div class="input-content"><input type="button" value="保存" /></div>
+                -->
+            </div>
+        </div>
+    </div>
+
+    <script src="../Scripts/jquery-2.1.3.min.js"></script>
+    <script>
+        $(function () {
+            bigbear.ui.createTab($("#tab"), {
+                buttonText: "添加模块",
+                result: [
+                    {
+                        text: "向导提示",
+                        url: "help.html",
+                        showClose: "0",
+                        status: "1"
+                    },
+                    {
+                        text: "学生信息",
+                        url: "info.html",
+                        showClose: "1",
+                        status: "1"
+                    }
+                ]
+            });
+        });
+        (function ($) {
+            var win = window;
+            var bb = win.bigbear = win.bigbear || {
+                ui: {}
+            };
+            var ui = bb.ui = {};
+            var Tab = function (elem, opts) {
+                this.elem = elem;
+                this.opts = opts;
+            };
+            var tabProto = Tab.prototype;
+            tabProto._deleteItem = function (item) {
+                var that = this;
+                this.getElem().find(".title .items div")
+                .eq(item["index"])
+                .fadeOut(function () {
+                    that._resetContent();
+                    that._updateStatus(item);
+                    that._triggerItem(item["index"] + 1);
+                    that.getElem().find(".title .adder").trigger("click");
+                });
+            };
+            tabProto._triggerItem = function (next) {
+                var nextStatus = this._getStatus(next);
+                var items = this.getElem().find(".title .items div");
+                next = items.eq(next);
+                if (next.size() && "1" == nextStatus) { //后继dom节点存在
+                    next.trigger("click");
+                }
+                else {
+                    items.eq(0).trigger("click");
+                }
+            };
+            tabProto._getStatus = function (index) {
+                var status = "";
+                $.each(this.getOpts()["result"], function (i, item) {
+                    if (index == item["index"]) {
+                        status += item["status"];
+                        return false;
+                    }
+                });
+                return status;
+            };
+            tabProto._updateStatus = function (item) {
+                var status = item["status"];
+                item["status"] = ("1" == status) ? "0" : "1";
+            };
+            tabProto.init = function () {
+                var that = this;
+                this.getElem().find(".title .adder")
+                .text("+" + this.getOpts()["buttonText"])
+                .on("click", function () {
+                    that._toggleConsolePanel(function () {
+                        var root = that.getElem().find(".console-panel").empty();
+                        $.each(that.getOpts()["result"], function (i, item) {
+                            if ("0" == item["status"]) {
+                                var elem = $("<div style='float:left';></div>")
+                                .data("item", item)
+                                .appendTo(root);
+                                $("<input type='radio' name='addmod' />").appendTo(elem);
+                                $("<span></span>").text(item["text"]).appendTo(elem);
+                            }
+                        });
+                        if (root.find("div").size()) {
+                            $("<input type='button' value='添加模块' style='margin-left:20px'/>")
+                            .on("click", function () {
+                                var data = root.find("input[type=radio]:checked").parent().data("item");
+                                that._updateStatus(data);
+                                that.getElem().find(".title .items div").eq(data["index"]).fadeIn().trigger("click");
+                                that.getElem().find(".title .adder").trigger("click");
+                            })
+                            .appendTo(root);
+                        }
+                        else {
+                            root.text("暂无任何可添加的项目！");
+                        }
+                    });
+                });
+                $.each(this.getOpts()["result"], function (i, item) {
+                    item["index"] = i;
+                    that._render(item);
+                });
+                this.getElem().find(".title .items div")
+                .eq(0)
+                .trigger("click"); // 假定是必须有一项，否则插件意义就不大了！
+            };
+            tabProto._toggleConsolePanel = function (callback) {
+                this.getElem().find(".console-panel").slideToggle(function () {
+                    $.isFunction(callback) && callback();
+                });
+            };
+            tabProto._resetContent = function () {
+                this.getElem().find(".content").html("");
+            };
+            tabProto._setContent = function (html) {
+                this.getElem().find(".content").html(html);
+            };
+            tabProto._getContent = function (url) {
+                return $.ajax({
+                    url: url
+                });
+            };
+            tabProto._render = function (data) {
+                var that = this;
+                var item = $("<div></div>")
+                .text(data["text"])
+                .on("click", function () {
+                    that._setCurrent(data["index"]);
+                    that._getContent(data["url"]).done(function (result) {
+                        that._setContent(result);
+                    })
+                    .fail(function () {
+                        throw new Error("Net Error !");
+                    });
+                })
+                .appendTo(this.getElem().find(".title .items"));
+                if ("1" == data["showClose"]) {
+                    $("<span class='del'>X</span>")
+                    .on("click", function () {
+                        if (win.confirm("是否删除此项？")) {
+                            that._deleteItem(data);
+                            return false; // 阻止冒泡
+                        }
+                    })
+                    .appendTo(item);
+                }
+            };
+            tabProto._setCurrent = function (index) {
+                var items = this.getElem().find(".title .items div").removeClass("active");
+                items.eq(index).addClass("active");
+                var contents = this.getElem().find(".content .c").hide();
+                contents.eq(index).show();
+            };
+            tabProto.getElem = function () {
+                return this.elem;
+            };
+            tabProto.getOpts = function () {
+                return this.opts;
+            };
+            ui.createTab = function (elem, opts) {
+                var tab = new Tab(elem, opts);
+                tab.init();
+                return tab;
+            };
+        })(jQuery);
+    </script>
+</body>
+</html>
