@@ -86,6 +86,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Plugins\AutoComplete\jQAutoComplete.html" />
+    <Content Include="Plugins\AutoComplete\jquery.autocomplete.js" />
     <Content Include="Plugins\AutoComplete\jQueryUI.html" />
     <Content Include="Plugins\AutoComplete\jsAutoComplete.html" />
     <Content Include="Plugins\AutoComplete\ko.autocomplete.js" />

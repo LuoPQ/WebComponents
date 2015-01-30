@@ -24,10 +24,13 @@
             koDate.date = date.getDate();
             koDate.day = date.getDay() + 1;
             koDate.dateText = koDate.date;
-            koDate.disabled = dateDiff(minDate, date) > 0;
+
+
+            koDate.disabled = (dateDiff(minDate, date) > 0 || month != currentMonth);
 
             if (month == currentMonth) {
                 var today = new Date();
+
                 if (date.getDate() == today.getDate()
                     && date.getFullYear() == today.getFullYear()
                     && date.getMonth() == today.getMonth()) {

@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <style>
+        div, input, ul, li { margin: 0; padding: 0; }
+        .input-txt { width: 200px; padding: 5px; margin: 20px 500px; position: fixed; }
+        .autocomplete-opt { border: 1px solid gray; list-style-type: none; background-color: #FFF; }
+            .autocomplete-opt li { cursor: pointer; height: 30px; line-height: 30px; padding: 0 5px; }
+                .autocomplete-opt .select, .autocomplete-opt li:hover { background-color: blue; color: white; }
+    </style>
+</head>
+<body>
+    <div>
+        <input class="autoComplete input-txt" type="text" />
+        <div>测试文字</div>
+    </div>
+    <script src="../../Scripts/jquery-2.1.3.min.js"></script>
+    <script src="jquery.autocomplete.js"></script>
+    <script>
+
+
+        var $ele = $("input.autoComplete").autoComplete({
+            data: [{ "Id": "AS", "Name": "ActionScript", "Key": "AS|ActionScript" },
+            { "Id": "aspx", "Name": "Aspx", "Key": "aspx|Aspx" },
+            { "Id": "B", "Name": "BASIC", "Key": "B|BASIC" },
+            { "Id": "E", "Name": "Erlang", "Key": "E|Erlang" }]
+        });
+        console.log($ele);
+    </script>
+</body>
+</html>
