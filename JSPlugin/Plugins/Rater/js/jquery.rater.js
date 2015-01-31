@@ -10,8 +10,7 @@
 
 	$.fn.rater = function(options) {
 		options = $.extend(defaults, options);
-
-		//====use each method to support every selecotr and return this for chaining=======
+		
 		return this.each(function() {
 			options.$element = $(this);
 			new rater(options);

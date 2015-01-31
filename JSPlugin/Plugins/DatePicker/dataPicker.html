@@ -1,0 +1,83 @@
+﻿<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <style type="text/css">
+        div, a, dl, dt, dd { margin: 0; padding: 0; }
+        .clear { clear: both; }
+        .clearfix { zoom: 1; }
+            .clearfix:after { clear: both; content: ""; display: block; height: 0; line-height: 0; visibility: hidden; }
+        .datepicker { border-color: #ff8f00; background: none repeat scroll 0 0 #fff; box-shadow: 1px 1px 3px #333333; width: 230px; position: relative; padding: 5px; }
+            .datepicker .month-prev, .datepicker .month-next { border-radius: 5px; border: 1px solid #ccc; cursor: pointer; height: 20px; width: 20px; }
+            .datepicker .month-prev { float: left; }
+            .datepicker .month-next { float: right; }
+                .datepicker .month-prev:before, .datepicker .month-next:before { content: ""; display: block; position: relative; left: 7px; top: 4px; width: 0; height: 0; border-bottom: 6px dashed transparent; border-top: 6px dashed transparent; }
+            .datepicker .month-prev:before { border-right: 6px solid #ff8f00; }
+            .datepicker .month-next:before { border-left: 6px solid #ff8f00; }
+            .datepicker dl { text-align: center; color: #404040; font: 12px/22px Georgia; }
+                .datepicker dl .month { width: 100%; font-weight: 700; padding-bottom: 5px; }
+                .datepicker dl .week { display: inline-block; float: left; height: 24px; line-height: 24px; width: 32px; border-bottom: 1px solid #ccc; border-top: 1px solid #ccc; }
+            .datepicker dd a { color: #404040; display: inline-block; height: 25px; line-height: 22px; margin: 1px 1px 0; outline: medium none; overflow: hidden; text-decoration: none; width: 30px; cursor: pointer; text-align: center; float: left; }
+                .datepicker dd .select, .datepicker dd a:hover { background-color: #ff8f00; color: #fff; }
+            .datepicker dd span { font-weight: bold; font-size: 10px; }
+            .datepicker dd .bw_today { color: #ff8f00; }
+            .datepicker dd .disabled, .datepicker dd .disabled:hover { background-color: transparent; color: #999; cursor: default; }
+    </style>
+</head>
+<body>
+    <div class="datepicker">
+        <dl>
+            <dt class="month">
+                <a href="javascript:;" class="month-prev"></a>
+                <span>2015年3月</span>
+                <a href="javascript:;" class="month-next"></a>
+            </dt>
+            <dt class="week">日</dt>
+            <dt class="week">一</dt>
+            <dt class="week">二</dt>
+            <dt class="week">三</dt>
+            <dt class="week">四</dt>
+            <dt class="week">五</dt>
+            <dt class="week">六</dt>
+            <dd class="clearfix">
+                <a href="javascript:;" class="disabled"></a>
+                <a href="javascript:;" class="disabled"></a>
+                <a href="javascript:;" class="disabled"></a>
+                <a href="javascript:;" class="disabled"></a>
+                <a href="javascript:;" class=""><span>元旦</span></a>
+                <a href="javascript:;" class="">2</a>
+                <a href="javascript:;" class="">3</a>
+                <a href="javascript:;" class="">4</a>
+                <a href="javascript:;" class="">5</a>
+                <a href="javascript:;" class="">6</a>
+                <a href="javascript:;" class="">7</a>
+                <a href="javascript:;" class="">8</a>
+                <a href="javascript:;" class="">9</a>
+                <a href="javascript:;" class="">10</a>
+                <a href="javascript:;" class="">11</a>
+                <a href="javascript:;" class="">12</a>
+                <a href="javascript:;" class="">13</a>
+                <a href="javascript:;" class="">14</a>
+                <a href="javascript:;" class="">15</a>
+                <a href="javascript:;" class="">16</a>
+                <a href="javascript:;" class="">17</a>
+                <a href="javascript:;" class="">18</a>
+                <a href="javascript:;" class="">19</a>
+                <a href="javascript:;" class="">20</a>
+                <a href="javascript:;" class="">21</a>
+                <a href="javascript:;" class="">22</a>
+                <a href="javascript:;" class="">23</a>
+                <a href="javascript:;" class="">24</a>
+                <a href="javascript:;" class="">25</a>
+                <a href="javascript:;" class="">26</a>
+                <a href="javascript:;" class="select">27</a>
+                <a href="javascript:;" class="">28</a>
+                <a href="javascript:;" class="">29</a>
+                <a href="javascript:;" class="">30</a>
+                <a href="javascript:;" class="bw_today">31</a>
+            </dd>
+
+        </dl>
+    </div>
+</body>
+</html>
