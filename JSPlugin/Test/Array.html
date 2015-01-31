@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+
+    <script>
+        Array.prototype.move = function (oldIndex, newIndex) {
+            if (newIndex >= this.length) {
+                var k = newIndex - this.length;
+                while ((k--) + 1) {
+                    this.push(undefined);
+                }
+            }
+            this.splice(newIndex, 0, this.splice(oldIndex, 1)[0]);
+            return this;
+        };
+
+        var arr = ["a", "b", "c", "d", "e", "f"];
+
+        console.table(arr);
+
+        arr.move(0, 3);
+
+        console.table(arr);
+
+    </script>
+</body>
+</html>
