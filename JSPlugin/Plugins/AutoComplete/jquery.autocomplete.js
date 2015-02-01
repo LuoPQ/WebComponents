@@ -6,9 +6,10 @@
         remoteDataUrl: null,
         onSelected: null,
     };
-    function autoComplete(options) {
 
-        var $ele = options.ele;
+    function autoComplete(ele, options) {
+
+        var $ele = ele;
 
         var $list = null;
 
