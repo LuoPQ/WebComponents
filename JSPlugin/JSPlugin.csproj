@@ -130,6 +130,7 @@
     <Content Include="Plugins\DatePicker\jQDatePicker.html" />
     <Content Include="Plugins\DatePicker\jquery.datepicker.js" />
     <Content Include="Plugins\DatePicker\ko.datepicker.js" />
+    <Content Include="Plugins\DatePicker\KOBinding.html" />
     <Content Include="Plugins\DatePicker\KODatePicker.html" />
     <Content Include="Plugins\Drag\drag.js" />
     <Content Include="Plugins\Drag\JSDrag.html" />

@@ -8,7 +8,7 @@
         .clear { clear: both; }
         .clearfix { zoom: 1; }
             .clearfix:after { clear: both; content: ""; display: block; height: 0; line-height: 0; visibility: hidden; }
-        .datepicker { text-align: center; color: #404040; font: 12px/22px Georgia; border-color: #ff8f00; background: none repeat scroll 0 0 #fff; box-shadow: 1px 1px 3px #333333; width: 230px; position: relative; padding: 5px; }
+        .datepicker { text-align: center; color: #404040; font: 12px/22px Georgia; border-color: #ff8f00; background: none repeat scroll 0 0 #fff; box-shadow: 1px 1px 3px #333333; width: 230px; position: relative; padding: 5px; display: none; }
             .datepicker .month-prev, .datepicker .month-next { border-radius: 5px; border: 1px solid #ccc; cursor: pointer; height: 20px; width: 20px; }
             .datepicker .month-prev { float: left; }
             .datepicker .month-next { float: right; }
@@ -26,7 +26,9 @@
 </head>
 <body>
     <input id="dateInput" type="text" placeholder="yyyy-MM-dd" style="margin:50px 200px" />
-    <img id="imgDate" src="http://pic.cnitblog.com/face/511616/20150113193553.png" />
+    <input id="dateInput2" type="text" placeholder="yyyy-MM-dd" style="margin:50px 200px" />
+
+    <!--<img id="imgDate" src="http://pic.cnitblog.com/face/511616/20150113193553.png" />-->
     <input id="setMinDate" type="button" value="设置最小日期" />
     <input id="setMaxDate" type="button" value="设置最大日期" />
 
@@ -34,7 +36,7 @@
     <script src="jquery.datepicker.js"></script>
     <script>
         var datePicker = $("#dateInput").datePicker();
-        var datePicker = $("#imgDate").datePicker();
+        var datePicker = $("#dateInput2").datePicker();
         $("#setMinDate").on("click", function () {
             datePicker.setMinDate(new Date(2015, 3, 1));
         });

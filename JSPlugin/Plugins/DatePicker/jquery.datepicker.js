@@ -238,18 +238,22 @@
             that.$ele.on({
                 "click": function (event) {
 
-                    that.show();
+                    //that.show();
 
-                    event = event || window.event;
-                    event.stopPropagation();
+                    //event = event || window.event;
+                    //event.stopPropagation();
                 },
                 "focus": function () {
                     that.show();
                 }
             });
 
-            $(document).on("click", function () {
-                that.hide();
+            $(document).on("click", function (event) {
+                event = event || window.event;
+                var target = event.target || event.srcElement;
+                if (that.$ele[0] != target) {      
+                    that.hide();
+                }
             });
             that.$container.on("click", function (event) {
                 event = event || window.event;
@@ -297,6 +301,9 @@
         setMaxDate: function (maxDate) {
             this.options.maxDate = new Date().parse(maxDate);
             this.refresh();
+        },
+        remove: function () {
+            this.$container.remove();
         }
     };
 
