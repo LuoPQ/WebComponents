@@ -1,10 +1,6 @@
 ﻿; (function ($) {
     "use strict";
-    var defaults = {
-        minDate: new Date(),
-        maxDate: null,
-        onDateSelected: null
-    };
+
 
     //#region Date扩展
 
@@ -107,15 +103,6 @@
 
             var $container = $('<dl class="datepicker"></dl>');
 
-            var offset = this.$ele.offset();
-            $container.css({
-                "top": offset.top + this.$ele.outerHeight(),
-                "left": offset.left,
-                "position": "absolute",
-                "z-Index": "9999",
-                "display": "none"
-            });
-
             $(document.body).append($container);
             this.$container = $container;
             this.refresh();
@@ -130,6 +117,13 @@
             var dateListHtml = this.createDateListHtml(currentYear, currentMonth);
 
             this.$container.html("").append(titleHtml).append(dateListHtml);
+
+            var inputVal = this.$ele.val();
+            if (inputVal) {
+                this.$container.find("dd .select").removeClass("select");
+                this.$container.find("dd>[date=" + inputVal + "]").addClass("select");
+            }
+
             this.bindEvent();
         },
         createTitleHtml: function (currentYear, currentMonth) {
@@ -226,6 +220,12 @@
                 if (!$this.hasClass("disabled")) {
                     var date = $this.attr("date");
                     that.selectDate(date);
+
+                    //var inputVal = $(this).val();
+                    //if (inputVal) {
+                    that.$container.find("dd .select").removeClass("select");
+                    that.$container.find("dd>[date=" + date + "]").addClass("select");
+                    //}
                 }
 
             });
@@ -237,11 +237,7 @@
             });
             that.$ele.on({
                 "click": function (event) {
-                    var inputVal = $(this).val();
-                    if (inputVal) {
-                        that.$container.find("dd .select").removeClass("select");
-                        that.$container.find("dd>[date=" + inputVal + "]").addClass("select");
-                    }
+
                     that.show();
 
                     event = event || window.event;
@@ -270,13 +266,28 @@
         },
         selectDate: function (date) {
             this.$ele.val(date);
-            this.options.onDateSelected && that.options.onDateSelected(date);
+            this.options.onDateSelected && this.options.onDateSelected(date);
             this.hide();
         },
         hide: function () {
             this.$container.hide();
         },
         show: function () {
+            var offset = this.$ele.offset();
+
+            var left = offset.left;
+            if (this.options.showCenter) {
+                left = left - (this.$ele.outerWidth() / 2);
+            }
+
+            this.$container.css({
+                "top": offset.top + this.$ele.outerHeight(),
+                "left": left,
+                "position": "absolute",
+                "z-Index": "9999",
+                "display": "none"
+            });
+
             this.$container.show();
         },
         setMinDate: function (minDate) {
@@ -290,6 +301,13 @@
     };
 
     $.fn.datePicker = function (options) {
+        //默认参数放里面，放在外面会污染全局
+        var defaults = {
+            minDate: new Date(),
+            maxDate: null,
+            onDateSelected: null,
+            showCenter: false
+        };
         options = $.extend(defaults, options || {});
         return new DatePicker($(this), options);
     }
