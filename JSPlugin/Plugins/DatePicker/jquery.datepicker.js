@@ -288,7 +288,7 @@
                 "top": offset.top + this.$ele.outerHeight(),
                 "left": left,
                 "position": "absolute",
-                "z-Index": "9999",
+                "z-Index": "999",
                 "display": "none"
             });
 

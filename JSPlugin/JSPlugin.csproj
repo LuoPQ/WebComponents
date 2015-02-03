@@ -132,6 +132,7 @@
     <Content Include="Plugins\DatePicker\ko.datepicker.js" />
     <Content Include="Plugins\DatePicker\KOBinding.html" />
     <Content Include="Plugins\DatePicker\KODatePicker.html" />
+    <Content Include="Plugins\Dialog\dialog.html" />
     <Content Include="Plugins\Drag\drag.js" />
     <Content Include="Plugins\Drag\JSDrag.html" />
     <Content Include="Global.asax" />

@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <style>
+        html, body, div { margin: 0; padding: 0; }
+        .mask { width: 100%; height: 100%; position: fixed; z-index: 3999; background-color: #a7a7a7; opacity: 0.3; filter: alpha(opacity=30); }
+    </style>
+</head>
+<body>
+    <div class="mask">遮罩层</div>
+    <div id="dialog" style="z-index:4000;width:500px;height:250px;background-color:ActiveCaption;border:1px solid #CCC;position:fixed;">
+        弹出的窗口
+    </div>
+    <div style="height:1500px;">
+    </div>
+    <script src="../../Scripts/jquery-2.1.3.min.js"></script>
+    <script>
+
+        console.log($(window).height());
+        console.log($(document.body).height());
+        console.log($(document).height());
+
+        $("#dialog").css({
+            
+        });
+
+    </script>
+</body>
+</html>

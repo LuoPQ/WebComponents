@@ -26,12 +26,14 @@
 </head>
 <body>
 
-    <div data-bind="foreach:list">
+    <div data-bind="with:current">
         <div style="margin:10px;padding:10px">
             <span data-bind="text:index"></span>
-            <input type="text" data-bind="datepicker:{isShow:index==$parent.delIndex(),unique:'list'+index}" />
+            <input type="text" data-bind="datepicker:{replace:true}" />
         </div>
     </div>
+
+    <input type="text" data-bind="datepicker:{}" />
     <input type="button" value="添加" data-bind="click:add" />
     <input type="button" value="移除" data-bind="click:remove" />
     <input type="button" value="切换显示" data-bind="click:toggle" />
@@ -44,22 +46,29 @@
     <script src="../../Scripts/knockout-3.2.0.js"></script>
     <script>
 
-        var currentEle = null;
         ko.bindingHandlers.datepicker = {
-            instance: new Array(),
+            //instance: new Array(),
+            instance: null,
             init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
                 var options = valueAccessor();
                 var that = ko.bindingHandlers.datepicker;
-                that.instance[options.unique] = $(element).datePicker();
-                if (!currentEle) {
-                    currentEle = element;
+                if (options.replace) {
+                    that.instance && that.instance.remove();
+                    that.instance = $(element).datePicker();
                 }
-                console.log(currentEle == element);
-                console.log(that.instance);
+                else {
+                    $(element).datePicker();
+                }
+
+
+                //that.instance[options.unique] = that.instance;
+
+                //console.log(currentEle == element);
+                //console.log(that.instance);
             },
             update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
                 //var options = valueAccessor();
-                var that = ko.bindingHandlers.datepicker;
+                //var that = ko.bindingHandlers.datepicker;
 
                 //var current = that.instance[0];
                 //for (var item in that.instance) {
@@ -73,11 +82,16 @@
                 //}
 
                 //$(element).datePicker();
+                //var options = valueAccessor();
+                //console.log(options.isShow);
 
-                var options = valueAccessor();
-                if (options.isShow) {
-                    that.instance[options.unique].remove();
-                }
+                //console.log(allBindings());
+                //console.log(viewModel);
+                //console.log(bindingContext);
+
+                //if (options.isShow) {
+                //    that.instance[options.unique].remove();
+                //}
             }
         };
 
