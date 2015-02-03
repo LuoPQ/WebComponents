@@ -1,5 +1,5 @@
 //js拖拽插件
-; (function () {
+//; (function () {
     "use strict";
 
     function drag(eles) {
@@ -104,4 +104,4 @@
             }
         }
     }
-})();
+//})();
