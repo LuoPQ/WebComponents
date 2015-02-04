@@ -21,6 +21,7 @@
     <div style="height:1500px;">
         <input type="button" id="btnShow" value="显示对话框" />
         <div style="border:1px solid #ccc;width:250px;height:200px;" id="dragObj">拖拽对象</div>
+        <div style="border:1px solid #ccc;width:250px;height:200px;" id="dragObj2">拖拽对象2</div>
     </div>
 
     <script src="http://static.yiqifei.com/js/jquery-1.8.2.min.js"></script>
@@ -51,6 +52,8 @@
         //    $(".mask").show();
         //})
         var dialog = $.dialog({
+            modal: false,
+            drag: false,
             html: '<div id="dialog" style="z-index:4000;width:500px;height:250px;background-color:ActiveCaption;border:1px solid #CCC;">弹出的窗口<a id="btnHide" href="javascript:;" style="position:absolute;top:1px;right:1px;border:1px solid #ccc;font-size:18px;">×</a></div>'
         });
 
@@ -65,6 +68,7 @@
         console.log($(window).scrollTop());
 
         $.drag($("#dragObj"));
+        $.drag($("#dragObj2"));
 
     </script>
 </body>

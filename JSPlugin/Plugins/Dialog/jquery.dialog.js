@@ -26,10 +26,14 @@
             var $ele = this.$ele;
             var that = this;
             //ele.style.marginTop = (parseInt(ele.style.marginTop) + scroll.top) + "px";
-            $ele.css("marginTop", (parseInt($ele.css("marginTop")) + $ele.scrollTop()) + "px");
+            $ele.css({
+                "marginTop": (parseInt($ele.css("marginTop")) + $ele.scrollTop()) + "px"
+                //"position": "relative"
+            });
 
             $ele.on({
                 "mousedown": function (event) {
+                    console.log("test");
                     event = event || window.event;
 
                     dragPara.mouseX = parseInt(event.clientX) + $ele.scrollLeft();
@@ -39,6 +43,7 @@
                     dragPara.objX = parseInt($ele.css('left')) || 0;
                     dragPara.objY = parseInt($ele.css('top')) || 0;
 
+                    dragPara.zIndex = $ele.parent().css("z-index");
                     $ele.css("z-index", ++dragPara.zIndex);
                 },
                 "mouseover": function () {
@@ -64,12 +69,11 @@
                             }
                         }
                         currentDrag.css({
-                            "position": "relative",
+                            "position": "absolute",
                             "left": parseInt(event.clientX) + $ele.scrollLeft() - dragPara.mouseX + dragPara.objX + "px",
                             "top": parseInt(event.clientY) + $ele.scrollTop() - dragPara.mouseY + dragPara.objY + "px"
                         });
 
-                        console.log(window.currentDrag);
 
                         //将onmousemove设置为null,提高性能，再使用定时器将事件绑定
                         //document.onmousemove = null;
@@ -168,11 +172,11 @@
             }
         },
         show: function () {
-            this.$mask.show();
+            this.$mask && this.$mask.show();
             this.$content.show();
         },
         hide: function () {
-            this.$mask.hide();
+            this.$mask && this.$mask.hide();
             this.$content.hide();
         },
         remove: function () {
