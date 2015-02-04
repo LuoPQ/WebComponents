@@ -84,11 +84,31 @@
         </div>
     </div>
     <script src="../../Scripts/jquery-2.1.3.min.js"></script>
-    <!--<script src="jquery.smint.js"></script>-->
+    <script src="jquery.smint.js"></script>
     <script>
         //$('.subMenu').smint({
         //    'scrollSpeed': 1000
         //});
+
+        var $menu = $(".subMenu");
+        var offsetTop = $menu.offset().top;
+
+        $(window).on("scroll", function () {
+            var $this = $(this);
+            if ($this.scrollTop() > offsetTop) {
+                $menu.css({
+                    "position": "fixed",
+                    "top": 0
+                })
+            }
+            else {
+                $menu.css({
+                    "position": "static"
+                })
+            }
+
+        })
+
     </script>
 </body>
 </html>
