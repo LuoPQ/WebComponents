@@ -248,16 +248,20 @@
                 }
             });
 
-            $(document).on("click", function (event) {
+            $(document).on("mousedown", function (event) {
                 event = event || window.event;
                 var target = event.target || event.srcElement;
-                if (that.$ele[0] != target) {      
+                if (that.$ele[0] != target && that.$ele[0] != target.parentNode) {
                     that.hide();
                 }
             });
-            that.$container.on("click", function (event) {
-                event = event || window.event;
-                event.stopPropagation();
+            that.$container.on({
+                "click": function (event) {
+                    that.stopBubble(event);
+                },
+                "mousedown": function (event) {
+                    that.stopBubble(event);
+                }
             });
         },
         prevMonth: function () {
@@ -288,7 +292,7 @@
                 "top": offset.top + this.$ele.outerHeight(),
                 "left": left,
                 "position": "absolute",
-                "z-Index": "999",
+                "z-Index": 9999,
                 "display": "none"
             });
 
@@ -304,6 +308,10 @@
         },
         remove: function () {
             this.$container.remove();
+        },
+        stopBubble: function (event) {
+            event = event || window.event;
+            event.stopPropagation();
         }
     };
 
