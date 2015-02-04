@@ -1,5 +1,5 @@
 //#region js拖拽插件
-; (function () {
+//; (function () {
     "use strict";
 
     Array.prototype.indexOf = function (value) {
@@ -32,11 +32,11 @@
     window.drag = function (eles) {
 
         var helper = {
-            //====判断对象是否为数组=====
+            //====判断对象是否为数�====
             isArray: function (o) {
                 return Object.prototype.toString.call(o) === '[object Array]';
             },
-            //====获取元素节点的样式属性====
+            //====获取元素节点的样式属�===
             getStyle: function (node, styleName) {
                 var realStyle = null;
                 if (node.currentStyle) {
@@ -46,7 +46,7 @@
                 }
                 return realStyle;
             },
-            //=====获取滚动条对于左侧和上方的距离======
+            //=====获取滚动条对于左侧和上方的距�=====
             getScroll: function () {
                 return {
                     left: document.documentElement.scrollLeft || document.body.scrollLeft,
@@ -97,7 +97,7 @@
             currentDrag = null;
         }
 
-        //=======移动鼠标触发的方法======
+        //=======移动鼠标触发的方�=====
         function move(event) {
             if (currentDrag) {
                 event = event || window.event;
@@ -126,5 +126,5 @@
             }
         }
     }
-})();
+//})();
 //#endregion
