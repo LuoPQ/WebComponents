@@ -5,29 +5,28 @@
     <title></title>
     <style>
         div, ul, li { padding: 0; margin: 0; }
-        #scrollPics { height: 150px; width: 100%; margin-bottom: 10px; overflow: hidden; position: relative; }
+        #scrollPics { height: 150px; width: 440px; margin-bottom: 10px; overflow: hidden; position: relative; }
             #scrollPics .slider li { float: left; }
+            #scrollPics .slider { position: absolute; width: 2500px; }
         .num { position: absolute; right: 5px; bottom: 5px; }
         #scrollPics .num li { float: left; color: #FF7300; text-align: center; line-height: 16px; width: 16px; height: 16px; cursor: pointer; overflow: hidden; margin: 3px 1px; border: 1px solid #FF7300; background-color: #fff; }
             #scrollPics .num li.on { color: #fff; line-height: 21px; width: 21px; height: 21px; font-size: 16px; margin: 0 1px; border: 0; background-color: #FF7300; font-weight: bold; }
     </style>
 </head>
 <body>
-    <div style="width:440px;">
-        <div id="scrollPics">
-            <ul class="slider">
-                <li><img src="http://i2.hdslb.com/u_user/3953b15495ef95c564319baa04f5c475.jpg" /></li>
-                <li><img src="http://i1.hdslb.com/u_user/f0b7b83968f73d067e9512672db65a1b.jpg" /></li>
-                <li><img src="http://i1.hdslb.com/u_user/40febc7c978ae71e646a9a23036ca68c.jpg" /></li>
-                <li><img src="http://i1.hdslb.com/u_user/b2ea9be2edeb6e73adbb03b367f5534e.jpg" /></li>
-            </ul>
-            <ul class="num">
-                <li class="on">1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>4</li>
-            </ul>
-        </div>
+    <div id="scrollPics">
+        <ul class="slider">
+            <li><img src="http://i2.hdslb.com/u_user/3953b15495ef95c564319baa04f5c475.jpg" /></li>
+            <li><img src="http://i1.hdslb.com/u_user/f0b7b83968f73d067e9512672db65a1b.jpg" /></li>
+            <li><img src="http://i1.hdslb.com/u_user/40febc7c978ae71e646a9a23036ca68c.jpg" /></li>
+            <li><img src="http://i1.hdslb.com/u_user/b2ea9be2edeb6e73adbb03b367f5534e.jpg" /></li>
+        </ul>
+        <ul class="num">
+            <li class="on">1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+        </ul>
     </div>
     <script src="../../Scripts/jquery-2.1.3.min.js"></script>
     <script>
@@ -52,17 +51,17 @@
             }, 3000);
         }).trigger("mouseleave");
 
-        var adHeight = $("#scrollPics>ul>li:first").height();
+        var adHeight = $("#scrollPics>ul>li:first").width();
 
         $(".slider").css({
-            "marginTop": -adHeight * index + "px"    //改变 marginTop 属性的值达到轮播的效果
+            "left": -adHeight * index + "px"    //改变 marginTop 属性的值达到轮播的效果
         });
 
         function showImg(index) {
-            var adHeight = $("#scrollPics>ul>li:first").height();
+            var adHeight = $("#scrollPics>ul>li:first").width();
             $(".slider").stop(true, false).animate({
-                "marginTop": -adHeight * index + "px"    //改变 marginTop 属性的值达到轮播的效果
-            }, 10000000);
+                "left": -adHeight * index + "px"    //改变 marginTop 属性的值达到轮播的效果
+            }, 1000);
             $(".num li").removeClass("on")
                 .eq(index).addClass("on");
         }

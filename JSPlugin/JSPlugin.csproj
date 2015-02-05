@@ -142,6 +142,7 @@
     <Content Include="index.html" />
     <Content Include="Plugins\DropDownList\DropDownList.html" />
     <Content Include="Plugins\DropDownList\jquery.dropdownlist.js" />
+    <Content Include="Plugins\Gallery\jQGallery.html" />
     <Content Include="Plugins\Pager\jquery.pager.js" />
     <Content Include="Plugins\Pager\JSPager.html" />
     <Content Include="Plugins\Pager\jsPager.js" />
