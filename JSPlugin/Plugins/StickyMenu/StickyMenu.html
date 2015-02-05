@@ -16,9 +16,9 @@
         .section { width: 100%; max-width: 1600px; min-width: 960px; z-index: 10; position: relative; margin: 0 auto; padding: 0 0 20px 0; height: 500px; }
         .inner { width: 960px; margin: 0 auto; position: relative; min-height: 50px; padding: 30px 0; font-size: 18px; font-family: 'Open Sans', sans-serif; font-weight: 300; }
             .inner:after { content: ""; display: table; clear: both; }
-        .subMenu { height: 50px; z-index: 1000; width: 100%; background: #0977bc; }
+        .subMenu { height: 50px; z-index: 1000; width: 100%; background: #0977bc; position: static; }
             .subMenu .inner { padding: 0; font-weight: 400; margin: 0 auto; }
-        .subNavBtn { display: block; height: 35px; width: 10%; float: left; margin: 0px 0px 0 0; text-decoration: none; font-size: 14px; padding: 15px 2% 0 2%; text-align: center; color: #fff; }
+        .subNavBtn { display: block; height: 35px; width: 10%; float: left; margin: 0 0 0 0; text-decoration: none; font-size: 14px; padding: 15px 2% 0 2%; text-align: center; color: #fff; }
         .subMenu a:hover { background: #1783c7; }
         .active { background: #25aae1; }
         .end { margin: 0; }
@@ -50,7 +50,8 @@
                 <a href="#s3" class="subNavBtn">Section 3</a>
                 <a href="#s4" class="subNavBtn">Section 4</a>
                 <a href="#s5" class="subNavBtn">Section 5</a>
-                <a href="http://www.baidu.com" class="subNavBtn extLink end">External Link</a>
+                <!--<a href="" class="subNavBtn extLink end">External Link</a>-->
+                <a href="javascript:;" id="btnHide">隐藏第一个</a>
             </div>
         </div>
 
@@ -90,24 +91,120 @@
         //    'scrollSpeed': 1000
         //});
 
+        var sectionRange = [];
+
+        $("#btnHide").on("click", function () {
+            $(".s1").slideToggle();
+
+            for (var i = 0; i < sectionRange.length; i++) {
+                if (i > 1) {
+                    sectionRange[i].top -= $(".s1").height();
+                    sectionRange[i].bottom -= $(".s1").height();
+                }
+            }
+            console.table(sectionRange);
+        });
+
         var $menu = $(".subMenu");
         var offsetTop = $menu.offset().top;
 
-        $(window).on("scroll", function () {
-            var $this = $(this);
-            if ($this.scrollTop() > offsetTop) {
-                $menu.css({
-                    "position": "fixed",
-                    "top": 0
-                })
+        var originPos = $menu.css("position");
+        var left = $menu.css("left");
+        var top = $menu.css("top");
+
+        var tops = [];
+
+        $menu.find("a").each(function (i, ele) {
+            if ($(this).attr("href").indexOf("#") < 0) {
+                return;
             }
-            else {
-                $menu.css({
-                    "position": "static"
+            var hash = $(this).attr("href").substr(1);
+            tops.push($("." + hash).offset().top - 50);
+            sectionRange.push({
+                top: $("." + hash).offset().top - 50,
+                bottom: $("." + hash).offset().top + $("." + hash).outerHeight()
+            })
+            $(ele).on("click", function () {
+                var hash = $(this).attr("href").substr(1);
+                $("." + hash).slideDown();
+                $("html,body").stop().animate({
+                    "scrollTop": tops[i]
                 })
+
+                $menu.find("a").removeClass("active");
+                $(this).addClass("active");
+                return false;
+            })
+
+            if ($(window).scrollTop() > 0) {
+                if ($(window).scrollTop() > offsetTop) {
+                    $menu.css({
+                        "position": "fixed",
+                        "top": 0
+                    });
+                    $('body').css('padding-top', $menu.height());
+                }
+                else {
+                    $menu.css({
+                        "position": originPos,
+                        "left": left,
+                        "top": top
+                    })
+                    $('body').css('padding-top', 0);
+
+                }
+                var scrollTop = $(window).scrollTop();
+                if ((sectionRange[i].top > scrollTop + 1 && (scrollTop + $(window).height()) > sectionRange[i].bottom) ||
+                    (sectionRange[i].top < scrollTop + 1 && (scrollTop + $(window).height()) < sectionRange[i].bottom)) {
+                    $menu.find("a").removeClass("active");
+                    $(ele).addClass("active");
+                }
+
+                if (scrollTop >= $(document).height() - $(window).height()) {
+                    $menu.find("a").removeClass("active");
+                    $menu.find("a").last().addClass("active");
+                }
             }
 
+            $(window).on("scroll", function () {
+
+                var $this = $(this);
+                if ($this.scrollTop() > offsetTop) {
+                    $menu.css({
+                        "position": "fixed",
+                        "top": 0
+                    })
+                    $('body').css('padding-top', $menu.height());
+                }
+                else {
+                    $menu.css({
+                        "position": originPos,
+                        "left": left,
+                        "top": top
+                    })
+                    $('body').css('padding-top', 0);
+                }
+
+                var scrollTop = $(window).scrollTop();
+                if ((sectionRange[i].top > scrollTop && (scrollTop + $(window).height()) > sectionRange[i].bottom) ||
+                    (sectionRange[i].top < scrollTop && (scrollTop + $(window).height()) < sectionRange[i].bottom)) {
+                    $menu.find("a").removeClass("active");
+                    $(ele).addClass("active");
+                }
+
+                if (scrollTop == 0) {
+                    $menu.find("a").removeClass("active");
+                    $menu.find("a").first().addClass("active");
+                }
+
+                if (scrollTop >= $(document).height() - $(window).height()) {
+                    $menu.find("a").removeClass("active");
+                    $menu.find("a").last().addClass("active");
+                }
+            })
         })
+
+
 
     </script>
 </body>

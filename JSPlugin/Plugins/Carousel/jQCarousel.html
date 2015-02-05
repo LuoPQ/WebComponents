@@ -5,7 +5,7 @@
     <title></title>
     <style>
         div, ul, li { padding: 0; margin: 0; }
-        #scrollPics { height: 150px; width: 440px; margin-bottom: 10px; overflow: hidden; position: relative; }
+        #scrollPics { height: 150px; width: 500px; margin-bottom: 10px; overflow: hidden; position: relative; }
             #scrollPics .slider li { float: left; }
             #scrollPics .slider { position: absolute; width: 2500px; }
         .num { position: absolute; right: 5px; bottom: 5px; }
@@ -59,8 +59,11 @@
 
         function showImg(index) {
             var adHeight = $("#scrollPics>ul>li:first").width();
+            if ((adHeight * 3 - adHeight * index) < 500) {
+                var left = -adHeight * 4 + 500;
+            }
             $(".slider").stop(true, false).animate({
-                "left": -adHeight * index + "px"    //改变 marginTop 属性的值达到轮播的效果
+                "left": ((adHeight * 3 - adHeight * index) < 500 ? left : (-adHeight * index)) + "px"    //改变 marginTop 属性的值达到轮播的效果
             }, 1000);
             $(".num li").removeClass("on")
                 .eq(index).addClass("on");
