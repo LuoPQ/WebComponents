@@ -127,6 +127,7 @@
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
     <Content Include="Plugins\Carousel\jQCarousel.html" />
+    <Content Include="Plugins\Carousel\jquery.carousel.js" />
     <Content Include="Plugins\DatePicker\dataPicker.html" />
     <Content Include="Plugins\DatePicker\jQDatePicker.html" />
     <Content Include="Plugins\DatePicker\jquery.datepicker.js" />
@@ -154,6 +155,7 @@
     <Content Include="Plugins\Rater\js\jquery.rater.js" />
     <Content Include="Plugins\Rater\koTemplates\ko-rater-template.html" />
     <Content Include="Plugins\StickyMenu\jquery.smint.js" />
+    <Content Include="Plugins\StickyMenu\jquery.stickymenu.js" />
     <Content Include="Plugins\StickyMenu\StickyMenu.html" />
     <Content Include="Scripts\jquery-2.1.3.js" />
     <Content Include="Scripts\jquery-2.1.3.min.js" />
