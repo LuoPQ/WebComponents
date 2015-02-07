@@ -3,7 +3,8 @@
 
     var defaults = {
         "speed": 500,
-        "isTopNav": true
+        "isTopNav": true,
+        "activeClass": "active"
     }
 
     if (typeof Array.prototype.indexOf != "function") {
@@ -70,21 +71,21 @@
 
             if ((sectionRange[i].top > scrollTop + 1 && (scrollTop + windowHeight) > sectionRange[i].bottom) ||
                 (sectionRange[i].top < scrollTop + 1 && (scrollTop + windowHeight) < sectionRange[i].bottom)) {
-                $links.removeClass("active");
-                $ele.addClass("active");
+                $links.removeClass(options.activeClass);
+                $ele.addClass(options.activeClass);
             }
 
 
             //第一个链接
             if (scrollTop == 0) {
-                $links.removeClass("active");
-                $links.first().addClass("active");
+                $links.removeClass(options.activeClass);
+                $links.first().addClass(options.activeClass);
             }
 
             //最后一个链接
             if (scrollTop >= $(document).height() - windowHeight) {
-                $links.removeClass("active");
-                $links.last().addClass("active");
+                $links.removeClass(options.activeClass);
+                $links.last().addClass(options.activeClass);
             }
         }
 
