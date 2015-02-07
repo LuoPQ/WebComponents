@@ -195,6 +195,7 @@
     <Folder Include="Content\images\" />
     <Folder Include="Models\" />
     <Folder Include="Plugins\Rater\css\" />
+    <Folder Include="Plugins\Timeline\" />
     <Folder Include="Views\Data\" />
   </ItemGroup>
   <PropertyGroup>

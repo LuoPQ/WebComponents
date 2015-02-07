@@ -40,7 +40,11 @@
         var originLeft = $menu.css("left");
         var originTop = $menu.css("top");
 
+        //菜单高度
         var menuHeight = $menu.height();
+
+        //窗口高度
+        var windowHeight = $(window).height();
 
         //存储目标区域的范围
         var sectionRange = [];
@@ -48,9 +52,11 @@
         //目标区域的hash值
         var hashes = [];
 
+        //切换隐藏的区域
+        var toggleHashes = [];
+
         function stickyMenu(i, $ele) {
             var scrollTop = $(window).scrollTop();
-            var windowHeight = $(window).height();
 
             if (scrollTop > offsetTop) {
                 $menu.css({
@@ -96,6 +102,7 @@
             }
             var hash = $(this).attr("href").substr(1);
             hashes.push(hash);
+            toggleHashes.push("toggle-" + hash);
 
             var $target = $("." + hash);
             var $ele = $(ele);
@@ -108,8 +115,9 @@
             })
 
             $ele.on("click", function () {
-                if ($target.isHidden()) {
-                    $target.slideDown();
+                var $toggleTarget = $("." + toggleHashes[i]);
+                if ($toggleTarget.isHidden()) {
+                    $toggleTarget.slideDown();
                 }
                 $("html,body").stop().animate({
                     "scrollTop": sectionRange[i].top
@@ -129,9 +137,9 @@
 
         $(".toggle").on("click", function () {
 
-            var targetHash = $(this).attr("hideTarget").substr(1);
-            var $target = $("." + targetHash);
-            var index = hashes.indexOf(targetHash);
+            var toggleHash = "toggle-" + $(this).attr("toggletarget").substr(1);
+            var $target = $("." + toggleHash);
+            var index = toggleHashes.indexOf(toggleHash);
 
             if (index >= 0) {
                 var height = $target.height();
