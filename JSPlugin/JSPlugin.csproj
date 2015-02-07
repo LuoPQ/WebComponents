@@ -127,7 +127,7 @@
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
     <Content Include="Plugins\Carousel\jQCarousel.html" />
-    <Content Include="Plugins\Carousel\jquery.carousel.js" />
+    <Content Include="Plugins\Carousel\jquery.slide.js" />
     <Content Include="Plugins\DatePicker\dataPicker.html" />
     <Content Include="Plugins\DatePicker\jQDatePicker.html" />
     <Content Include="Plugins\DatePicker\jquery.datepicker.js" />

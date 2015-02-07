@@ -5,9 +5,9 @@
     <title></title>
     <style>
         div, ul, li { padding: 0; margin: 0; }
-        .container { height: 220px; width: 500px; margin-bottom: 10px; overflow: hidden; position: relative; }
-        .container .slider li { float: left; }
-        .container .slider { position: absolute; width: 2500px; }
+        .container { height: 220px; width: 500px; margin-bottom: 10px; }
+            .container .slider li { float: left; }
+        /*.container .slider { position: absolute; width: 2500px; }*/
         .num { position: absolute; right: 5px; bottom: 5px; }
         .container .num li { float: left; color: #FF7300; text-align: center; line-height: 16px; width: 16px; height: 16px; cursor: pointer; overflow: hidden; margin: 3px 1px; border: 1px solid #FF7300; background-color: #fff; }
             .container .num li.on { color: #fff; line-height: 21px; width: 21px; height: 21px; font-size: 16px; margin: 0 1px; border: 0; background-color: #FF7300; font-weight: bold; }
@@ -16,12 +16,14 @@
 <body>
 
     <div class="container">
-        <a href="javascript:;"><img src="http://i2.hdslb.com/u_user/3953b15495ef95c564319baa04f5c475.jpg" /></a>
+        <div class="slider">
+            <a href="javascript:;"><img src="http://i2.hdslb.com/u_user/3953b15495ef95c564319baa04f5c475.jpg" /></a>
+        </div>
     </div>
 
 
 
-    <div class="container">
+    <div class="container" style="display:none">
         <ul class="slider">
             <li><img src="http://i2.hdslb.com/u_user/3953b15495ef95c564319baa04f5c475.jpg" /></li>
             <li><img src="http://i1.hdslb.com/u_user/f0b7b83968f73d067e9512672db65a1b.jpg" /></li>
@@ -39,46 +41,50 @@
     <input type="button" value="向右" />
 
     <script src="../../Scripts/jquery-2.1.3.min.js"></script>
-    <script src="jquery.carousel.js"></script>
+    <script src="jquery.slide.js"></script>
     <script>
-        //滚动广告
-        var len = $(".num > li").length;
-        var index = 0;  //图片序号
-        var adTimer;
-        $(".num li").mouseover(function () {
-            index = $(".num li").index(this);  //获取鼠标悬浮 li 的index
-            showImg(index);
-        }).eq(0).mouseover();
-        //滑入停止动画，滑出开始动画.
-        $('.container').hover(function () {
-            clearInterval(adTimer);
-        }, function () {
-            adTimer = setInterval(function () {
-                showImg(index)
-                index++;
-                if (index == len) {       //最后一张图片之后，转到第一张
-                    index = 0;
-                }
-            }, 3000);
-        }).trigger("mouseleave");
 
-        var adHeight = $(".container>ul>li:first").width();
+        $(".container").slide();
 
-        $(".slider").css({
-            "left": -adHeight * index + "px"    //改变 marginTop 属性的值达到轮播的效果
-        });
 
-        function showImg(index) {
-            var adHeight = $(".container>ul>li:first").width();
-            if ((adHeight * 3 - adHeight * index) < 500) {
-                var left = -adHeight * 4 + 500;
-            }
-            $(".slider").stop(true, false).animate({
-                "left": ((adHeight * 3 - adHeight * index) < 500 ? left : (-adHeight * index)) + "px"    //改变 marginTop 属性的值达到轮播的效果
-            }, 1000);
-            $(".num li").removeClass("on")
-                .eq(index).addClass("on");
-        }
+        ////滚动广告
+        //var len = $(".num > li").length;
+        //var index = 0;  //图片序号
+        //var adTimer;
+        //$(".num li").mouseover(function () {
+        //    index = $(".num li").index(this);  //获取鼠标悬浮 li 的index
+        //    showImg(index);
+        //}).eq(0).mouseover();
+        ////滑入停止动画，滑出开始动画.
+        //$('.container').hover(function () {
+        //    clearInterval(adTimer);
+        //}, function () {
+        //    adTimer = setInterval(function () {
+        //        showImg(index)
+        //        index++;
+        //        if (index == len) {       //最后一张图片之后，转到第一张
+        //            index = 0;
+        //        }
+        //    }, 3000);
+        //}).trigger("mouseleave");
+
+        //var adHeight = $(".container>ul>li:first").width();
+
+        //$(".slider").css({
+        //    "left": -adHeight * index + "px"    //改变 marginTop 属性的值达到轮播的效果
+        //});
+
+        //function showImg(index) {
+        //    var adHeight = $(".container>ul>li:first").width();
+        //    if ((adHeight * 3 - adHeight * index) < 500) {
+        //        var left = -adHeight * 4 + 500;
+        //    }
+        //    $(".slider").stop(true, false).animate({
+        //        "left": ((adHeight * 3 - adHeight * index) < 500 ? left : (-adHeight * index)) + "px"    //改变 marginTop 属性的值达到轮播的效果
+        //    }, 1000);
+        //    $(".num li").removeClass("on")
+        //        .eq(index).addClass("on");
+        //}
     </script>
 </body>
 </html>
