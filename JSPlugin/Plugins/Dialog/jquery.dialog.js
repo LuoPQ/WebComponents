@@ -33,7 +33,6 @@
 
             $ele.on({
                 "mousedown": function (event) {
-                    console.log("test");
                     event = event || window.event;
 
                     dragPara.mouseX = parseInt(event.clientX) + $ele.scrollLeft();
@@ -68,10 +67,17 @@
                                 return false;
                             }
                         }
+
+                        var moveLeft = parseInt(event.clientX) + $ele.scrollLeft() - dragPara.mouseX + dragPara.objX;
+                        var moveTop = parseInt(event.clientY) + $ele.scrollTop() - dragPara.mouseY + dragPara.objY;
+
+                        //var maxMoveLeft = $(window).width() - $ele.outerWidth();
+                        //moveLeft > maxMoveLeft && (moveLeft = maxMoveLeft);
+
                         currentDrag.css({
                             "position": "absolute",
-                            "left": parseInt(event.clientX) + $ele.scrollLeft() - dragPara.mouseX + dragPara.objX + "px",
-                            "top": parseInt(event.clientY) + $ele.scrollTop() - dragPara.mouseY + dragPara.objY + "px"
+                            "left": (moveLeft > 0 ? moveLeft : 0) + "px",
+                            "top": (moveTop > 0 ? moveTop : 0) + "px"
                         });
 
 

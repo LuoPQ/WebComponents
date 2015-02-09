@@ -24,6 +24,13 @@
         <div style="border:1px solid #ccc;width:250px;height:200px;" id="dragObj2">拖拽对象2</div>
     </div>
 
+    <script id="diaLogTemp" type="text/html">
+        <div style="z-index:4000;width:500px;height:250px;background-color:ActiveCaption;border:1px solid #CCC;">
+            弹出的窗口
+            <a id="btnHide" href="javascript:;" style="position:absolute;top:1px;right:1px;border:1px solid #ccc;font-size:18px;">×</a>
+        </div>
+    </script>
+
     <script src="http://static.yiqifei.com/js/jquery-1.8.2.min.js"></script>
     <script src="jquery.dialog.js"></script>
     <script>
@@ -51,10 +58,15 @@
         //    $("#dialog").show();
         //    $(".mask").show();
         //})
+
+        //var parent = $("#dialog").wrap("<div></div>").parent();
+        //var html = parent.html();
+        //$("#dialog").unwrap();
+
         var dialog = $.dialog({
-            modal: false,
+            modal: true,
             drag: true,
-            html: '<div id="dialog" style="z-index:4000;width:500px;height:250px;background-color:ActiveCaption;border:1px solid #CCC;">弹出的窗口<a id="btnHide" href="javascript:;" style="position:absolute;top:1px;right:1px;border:1px solid #ccc;font-size:18px;">×</a></div>'
+            html: $("#diaLogTemp").html()
         });
 
         $("#btnShow").on("click", function () {

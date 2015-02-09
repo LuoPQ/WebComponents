@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+
+    <div id="dialog" style="z-index:4000;width:500px;height:250px;background-color:ActiveCaption;border:1px solid #CCC;display:none" data-bind="dialog:{'onShow':show}"></div>
+    <input type="button" value="弹出对话框" data-bind="click:show" />
+    <script src="../../Scripts/jquery-2.1.3.min.js"></script>
+    <script src="jquery.dialog.js"></script>
+    <script src="../../Scripts/knockout-3.2.0.js"></script>
+    <script>
+        ko.bindingHandlers.dialog = {
+            init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                var options = valueAccessor();
+
+                var parent = $(element).wrap("<div></div>").parent();
+                var html = parent.html();
+                $(element).unwrap();
+                var dialog = $.dialog({
+                    modal: true,
+                    drag: true,
+                    html: html
+                });
+                options.onShow = dialog.show;
+            },
+            update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+
+            }
+        }
+
+        var VM = function () {
+            var self = this;
+            self.show = function () {
+
+            };
+        }
+
+        ko.applyBindings(VM);
+    </script>
+</body>
+</html>
