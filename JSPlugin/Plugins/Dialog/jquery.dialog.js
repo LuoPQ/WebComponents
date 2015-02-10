@@ -21,10 +21,12 @@
         constructor: Drag,
         init: function () {
             this.bindEvent();
+
         },
         bindEvent: function () {
             var $ele = this.$ele;
             var that = this;
+
             //ele.style.marginTop = (parseInt(ele.style.marginTop) + scroll.top) + "px";
             $ele.css({
                 "marginTop": (parseInt($ele.css("marginTop")) + $ele.scrollTop()) + "px"
@@ -39,8 +41,8 @@
                     dragPara.mouseY = parseInt(event.clientY) + $ele.scrollTop();
 
                     currentDrag = $ele;
-                    dragPara.objX = parseInt($ele.css('left')) || 0;
-                    dragPara.objY = parseInt($ele.css('top')) || 0;
+                    dragPara.objX = parseInt($ele.offset().left) || 0;
+                    dragPara.objY = parseInt($ele.offset().top) || 0;
 
                     dragPara.zIndex = $ele.parent().css("z-index");
                     $ele.css("z-index", ++dragPara.zIndex);
@@ -60,6 +62,7 @@
                     that.clearDrag();
                 },
                 "mousemove": function (event) {
+
                     if (currentDrag) {
                         event = event || window.event;
                         if (!event) {
@@ -71,8 +74,10 @@
                         var moveLeft = parseInt(event.clientX) + $ele.scrollLeft() - dragPara.mouseX + dragPara.objX;
                         var moveTop = parseInt(event.clientY) + $ele.scrollTop() - dragPara.mouseY + dragPara.objY;
 
-                        //var maxMoveLeft = $(window).width() - $ele.outerWidth();
-                        //moveLeft > maxMoveLeft && (moveLeft = maxMoveLeft);
+                        if (moveLeft > ($(window).width() - currentDrag.width())) {
+                            moveLeft = $(window).width() - currentDrag.width();
+
+                        }
 
                         currentDrag.css({
                             "position": "absolute",
@@ -127,10 +132,10 @@
     };
 
     //#region 对话框对象
-    function Dialog(options) {
+    function Dialog($ele, options) {
         this.options = options;
         this.$mask = null;
-        this.$content = null;
+        this.$ele = $ele;
         this.renderHtml();
     }
 
@@ -150,44 +155,44 @@
                 this.$mask = $mask;
             }
             var position = this.options.fixed ? "fixed" : "absolute";
-            var $content = $(this.options.html);
+
             var $window = $(window);
-            $content.css({
+            this.$ele.css({
                 "z-index": parseInt($mask && $mask.css("z-index") || 999, 10) + 1,
                 "position": position,
-                "top": ($window.height() - $content.height()) / 2,
-                "left": ($window.width() - $content.width()) / 2,
+                "top": ($window.height() - this.$ele.height()) / 2,
+                "left": ($window.width() - this.$ele.width()) / 2,
                 "display": "none"
             })
-            $(document.body).append($content);
-            this.$content = $content;
+
             this.bindEvent();
         },
         bindEvent: function () {
             var $window = $(window);
             var that = this;
             $window.on("resize", function () {
-                that.$content.css({
-                    top: ($window.height() - that.$content.height()) / 2,
-                    left: ($window.width() - that.$content.width()) / 2
+                that.$ele.css({
+
+                    top: ($window.height() - that.$ele.height()) / 2,
+                    left: ($window.width() - that.$ele.width()) / 2
                 });
             });
 
             if (that.options.drag) {
-                $.drag(that.$content);
+                $.drag(that.$ele);
             }
         },
         show: function () {
             this.$mask && this.$mask.show();
-            this.$content.show();
+            this.$ele.show();
         },
         hide: function () {
             this.$mask && this.$mask.hide();
-            this.$content.hide();
+            this.$ele.hide();
         },
         remove: function () {
             this.$mask.remove();
-            this.$content.remove();
+            this.$ele.remove();
         }
     }
     //#endregion 
@@ -196,7 +201,7 @@
         drag: function ($ele) {
             new Drag($ele, {});
         },
-        dialog: function (options) {
+        dialog: function ($ele, options) {
             var defaults = {
                 modal: true,
                 maskStyle: {
@@ -209,7 +214,7 @@
                 html: "<p>弹出对话框</p>"
             };
             options = $.extend(defaults, options || {});
-            var dialog = new Dialog(options);
+            var dialog = new Dialog($ele, options);
             //dialog.show();
 
             return dialog;

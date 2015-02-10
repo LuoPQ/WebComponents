@@ -39,7 +39,7 @@
                 count = $sliderItems.length / options.scrollCount;
 
                 //横向滚动的距离等于元素的宽度乘以滚动的元素个数
-                scrollLength = $sliderItems.first().height() * options.scrollCount;
+                scrollLength = $sliderItems.first().outerHeight(true) * options.scrollCount;
 
 
                 //滑入停止动画，滑出开始动画.
@@ -67,8 +67,7 @@
                 count = $sliderItems.length / options.scrollCount;
 
                 //横向滚动的距离等于元素的宽度乘以滚动的元素个数
-                scrollLength = $sliderItems.first().width() * options.scrollCount;
-
+                scrollLength = $sliderItems.first().outerWidth(true) * options.scrollCount;
 
                 //滑入停止动画，滑出开始动画.
                 $container.hover(function () {
@@ -85,7 +84,7 @@
 
                 sliderCss = $.extend(sliderCss,
                     {
-                        "width": $sliderItems.length * $sliderItems.first().width(),
+                        "width": $sliderItems.length * $sliderItems.first().outerWidth(true),
                         "left": -scrollLength * index + "px" //改变 marginTop 属性的值达到轮播的效果
                     });
 
@@ -114,7 +113,6 @@
             if (scrollLength * (count - index) < containerLength) {
                 var maxScrollLength = containerLength - scrollLength * count;
             }
-
             var resultValue = maxScrollLength ? maxScrollLength : (-scrollLength * index) + "px";
             var animateCss = null;
 
