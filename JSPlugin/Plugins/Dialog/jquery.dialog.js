@@ -184,7 +184,7 @@
         },
         show: function () {
             this.$mask && this.$mask.show();
-            this.$ele.show();
+            this.$ele.slideDown();
         },
         hide: function () {
             this.$mask && this.$mask.hide();
