@@ -62,7 +62,6 @@
                     that.clearDrag();
                 },
                 "mousemove": function (event) {
-
                     if (currentDrag) {
                         event = event || window.event;
                         if (!event) {
@@ -74,9 +73,9 @@
                         var moveLeft = parseInt(event.clientX) + $ele.scrollLeft() - dragPara.mouseX + dragPara.objX;
                         var moveTop = parseInt(event.clientY) + $ele.scrollTop() - dragPara.mouseY + dragPara.objY;
 
+                        //移动的距离不能超过窗口的宽度
                         if (moveLeft > ($(window).width() - currentDrag.width())) {
                             moveLeft = $(window).width() - currentDrag.width();
-
                         }
 
                         currentDrag.css({
@@ -84,7 +83,6 @@
                             "left": (moveLeft > 0 ? moveLeft : 0) + "px",
                             "top": (moveTop > 0 ? moveTop : 0) + "px"
                         });
-
 
                         //将onmousemove设置为null,提高性能，再使用定时器将事件绑定
                         //document.onmousemove = null;
@@ -100,28 +98,28 @@
             })
         },
         move: function (event) {
-            if (currentDrag) {
-                var that = this;
-                event = event || window.event;
-                if (!event) {
-                    currentDrag.onselectstart = function () {
-                        return false;
-                    }
-                }
-                //.style.position = "relative";
+            //if (currentDrag) {
+            //    var that = this;
+            //    event = event || window.event;
+            //    if (!event) {
+            //        currentDrag.onselectstart = function () {
+            //            return false;
+            //        }
+            //    }
+            //    //.style.position = "relative";
 
-                this.$ele.css({
-                    "position": "relative",
-                    "left": parseInt(event.clientX) + this.$ele.scrollLeft() - dragPara.mouseX + dragPara.objX + "px",
-                    "top": parseInt(event.clientY) + this.$ele.scrollTop() - dragPara.mouseY + dragPara.objY + "px"
-                });
+            //    this.$ele.css({
+            //        "position": "relative",
+            //        "left": parseInt(event.clientX) + this.$ele.scrollLeft() - dragPara.mouseX + dragPara.objX + "px",
+            //        "top": parseInt(event.clientY) + this.$ele.scrollTop() - dragPara.mouseY + dragPara.objY + "px"
+            //    });
 
-                //将onmousemove设置为null,提高性能，再使用定时器将事件绑定
-                document.onmousemove = null;
-                setTimeout(function () {
-                    document.onmousemove = that.move;
-                }, 30);
-            }
+            //    //将onmousemove设置为null,提高性能，再使用定时器将事件绑定
+            //    document.onmousemove = null;
+            //    setTimeout(function () {
+            //        document.onmousemove = that.move;
+            //    }, 30);
+            //}
         },
         forbid: function () {
 
@@ -162,7 +160,9 @@
                 "position": position,
                 "top": ($window.height() - this.$ele.height()) / 2,
                 "left": ($window.width() - this.$ele.width()) / 2,
-                "display": "none"
+                "display": "none",
+                "marginTop": 0,
+                "marginLeft": 0
             })
 
             this.bindEvent();
@@ -184,7 +184,7 @@
         },
         show: function () {
             this.$mask && this.$mask.show();
-            this.$ele.slideDown();
+            this.$ele.slideDown("fast");
         },
         hide: function () {
             this.$mask && this.$mask.hide();
