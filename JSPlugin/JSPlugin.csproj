@@ -141,6 +141,9 @@
     <Content Include="Plugins\Drag\drag.js" />
     <Content Include="Plugins\Drag\JSDrag.html" />
     <Content Include="Global.asax" />
+    <Content Include="Plugins\Sortable\dbx.min.js.map">
+      <DependentUpon>dbx.min.js</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="index.html" />
     <Content Include="Plugins\DropDownList\DropDownList.html" />
@@ -156,6 +159,11 @@
     <Content Include="Plugins\Rater\images\star.png" />
     <Content Include="Plugins\Rater\js\jquery.rater.js" />
     <Content Include="Plugins\Rater\koTemplates\ko-rater-template.html" />
+    <Content Include="Plugins\Sortable\dbx.js" />
+    <Content Include="Plugins\Sortable\dbx.min.js">
+      <DependentUpon>dbx.js</DependentUpon>
+    </Content>
+    <Content Include="Plugins\Sortable\jQSortable.html" />
     <Content Include="Plugins\StickyMenu\jquery.smint.js" />
     <Content Include="Plugins\StickyMenu\jquery.stickymenu.js" />
     <Content Include="Plugins\StickyMenu\StickyMenu.html" />

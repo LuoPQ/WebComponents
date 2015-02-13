@@ -1,0 +1,177 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <style>
+        html, body { background: #fff; color: #000; font-size: 100%; }
+        body { font-size: 0.8em; padding: 20px 20px 0 0; }
+        h1 { font: normal normal normal 1.6em/1.4 arial, sans-serif; margin: 0 0 0.2em 0; }
+        p, label { font: normal normal normal 1.1em/1.4 tahoma, sans-serif; margin: 0 0 1em 0; }
+        abbr { font-style: normal; border: none; cursor: default; }
+        .clear { clear: both; }
+        form fieldset { border: none; padding: 0; }
+        pre { background: #eeeef3; border: 1px solid #666; padding: 10px 30px 10px 10px; }
+            pre.demoblock { font-size: 0.92em; display: inline-block; margin: 0 0 1em 0; }
+        form.demoform { border: 1px solid #666; background: #ffc; display: inline-block; padding: 10px 20px 10px 10px; margin: 0 0 20px 0; }
+            form.demoform input, form.demoform label { float: left; margin: 0; color: #222; }
+            form.demoform input { margin: 2px 8px 0 0; }
+
+        /****************************************************************
+          docking boxes core CSS: YOU MUST NOT CHANGE OR OVERRIDE THESE
+        *****************************************************************/
+        .dbx-clone { position: absolute; visibility: hidden; }
+            .dbx-clone,
+            .dbx-clone .dbx-handle-cursor { cursor: move !important; }
+        .dbx-dummy { display: block; width: 0; height: 0; overflow: hidden; margin: 0 !important; padding: 0 !important; }
+        .dbx-group, .dbx-box, .dbx-handle { position: relative; display: block; }
+        /****************************************************************
+          avoid padding, margins or borders on dbx-box,
+          to reduce visual discrepancies between it and the clone.
+          overall, dbx-box is best left as visually unstyled as possible
+        *****************************************************************/
+        .dbx-box { margin: 0; padding: 0; border: none; }
+        /****************************************************************
+          otherwise, do what you like :)
+        *****************************************************************/
+        /* group container(s) */
+        ol.dbx-group { float: left; padding: 0; margin: 0 50px 50px 20px; background: #fff; width: 32em; list-style-type: none; }
+        /* boxes */
+        li.dbx-box { display: block; background: transparent; font: normal normal normal 1em/1.2 tahoma,sans-serif; list-style-type: none; }
+        li.dbx-box-hover, li.dbx-box-focus { background: #eeeef3; }
+        /* handles */
+        li.dbx-box a.dbx-handle,
+        li.dbx-box a.dbx-handle:visited { border-bottom: 1px solid #aaa; border-top: 1px solid #fff; color: #555; text-decoration: none; padding: 3px 15px 5px 5px; }
+        li.dbx-box.first-child { font-weight: bold; }
+        li.dbx-box.last-child a.dbx-handle,
+        li.dbx-box.last-child a.dbx-handle:visited { border-bottom: none; }
+        /* hacks for IE6 */
+        * html .dbx-tooltip { font-weight: normal !important; }
+        * html ol.dbx-group { display: inline !important; }
+    </style>
+</head>
+<body>
+    <ol id="booklist" class="dbx-group">
+
+        <li class="dbx-box">
+            <a href="http://www.sitepoint.com/launch/fee47ea/3/151" class="dbx-handle" title="The Principles of Successful Freelancing">
+                The Principles of Successful Freelancing
+            </a>
+        </li>
+        <li class="dbx-box">
+            <a href="http://www.sitepoint.com/launch/fee47ea/3/147" class="dbx-handle" title="Build Your Own ASP.NET 3.5 Web Site Using C# & VB">
+                Build Your Own ASP.NET 3.5 Web Site Using C# & VB
+            </a>
+        </li>
+        <li class="dbx-box">
+            <a href="http://www.sitepoint.com/launch/fee47ea/3/145" class="dbx-handle" title="Build Your Own Web Site The Right Way Using HTML & CSS">
+                Build Your Own Web Site The Right Way Using HTML & CSS
+            </a>
+        </li>
+        <li class="dbx-box">
+            <a href="http://www.sitepoint.com/launch/fee47ea/3/144" class="dbx-handle" title="Everything You Know About CSS is Wrong!">
+                Everything You Know About CSS is Wrong!
+            </a>
+        </li>
+        <li class="dbx-box">
+            <a href="http://www.sitepoint.com/launch/fee47ea/3/109" class="dbx-handle" title="Simply JavaScript">
+                Simply JavaScript
+            </a>
+        </li>
+        <li class="dbx-box">
+            <a href="http://www.sitepoint.com/launch/fee47ea/3/140" class="dbx-handle" title="Simply Rails 2">
+                Simply Rails 2
+            </a>
+        </li>
+        <li class="dbx-box">
+            <a href="http://www.sitepoint.com/launch/fee47ea/3/135" class="dbx-handle" title="The Principles of Project Management">
+                The Principles of Project Management
+            </a>
+        </li>
+        <li class="dbx-box">
+            <a href="http://www.sitepoint.com/launch/fee47ea/3/120" class="dbx-handle" title="The PHP Anthology">
+                The PHP Anthology
+            </a>
+        </li>
+        <li class="dbx-box">
+            <a href="http://www.sitepoint.com/launch/fee47ea/3/137" class="dbx-handle" title="The Ultimate HTML Reference">
+                The Ultimate HTML Reference
+            </a>
+        </li>
+        <li class="dbx-box">
+            <a href="http://www.sitepoint.com/launch/fee47ea/3/133" class="dbx-handle" title="The Ultimate CSS Reference">
+                The Ultimate CSS Reference
+            </a>
+        </li>
+        <li class="dbx-box">
+            <a href="http://www.sitepoint.com/launch/fee47ea/3/130" class="dbx-handle" title="The Art &amp; Science of JavaScript">
+                The Art &amp; Science of JavaScript
+            </a>
+        </li>
+        <li class="dbx-box">
+            <a href="http://www.sitepoint.com/launch/fee47ea/3/83" class="dbx-handle" title="Principles of Beautiful Web Design">
+                Principles of Beautiful Web Design
+            </a>
+        </li>
+        <li class="dbx-box">
+            <a href="http://www.sitepoint.com/launch/fee47ea/3/115" class="dbx-handle" title="The ASP.NET 2.0 Anthology">
+                The ASP.NET 2.0 Anthology
+            </a>
+        </li>
+        <li class="dbx-box">
+            <a href="http://www.sitepoint.com/launch/fee47ea/3/112" class="dbx-handle" title="The CSS Anthology">
+                The CSS Anthology
+            </a>
+        </li>
+
+    </ol>
+    <script src="../../Scripts/jquery-2.1.3.min.js"></script>
+    <script src="dbx.js"></script>
+    <script>
+        //initialise the docking boxes manager
+        var manager = new dbxManager(
+            'list',					// session ID [/-_a-zA-Z0-9/]
+            'yes',					// enable box-ID based dynamic groups ['yes'|'no']
+            'yes',					// hide source box while dragging ['yes'|'no']
+            ''						// toggle button element type ['link'|'button']
+            );
+
+
+        //create a docking boxes group for the desktop area
+        var booklist = new dbxGroup(
+            'booklist', 			// container ID [/-_a-zA-Z0-9/]
+            'vertical', 			// orientation ['vertical'|'horizontal'|'freeform'|'freeform-insert'|'confirm'|'confirm-insert']
+            '5', 					// drag threshold ['n' pixels]
+            'yes',					// restrict drag movement to container/axis ['yes'|'no']
+            '10', 					// animate re-ordering [frames per transition, or '0' for no effect]
+            'no', 					// include open/close toggle buttons ['yes'|'no']
+            '', 					// default state ['open'|'closed']
+
+            '', 					// word for "open", as in "open this box"
+            '', 					// word for "close", as in "close this box"
+            '',						// sentence for "move this box" by mouse
+            '',						// pattern-match sentence for "(open|close) this box" by mouse
+            '',						// sentence for "move this box" by keyboard
+            '',						// pattern-match sentence-fragment for "(open|close) this box" by keyboard
+            '',						// pattern-match syntax for title-attribute conflicts
+
+            '',						// confirm dialog sentence for "selection okay"
+            ''						// confirm dialog sentence for "selection not okay"
+            );
+
+
+
+        //onanimate method is used to create a cute opacity cross-fade :)
+        manager.onanimate = function () {
+            if (this.get('#dbx-crossfade').checked) {
+                this.sourcebox.style.visibility = 'visible';
+
+                var opacity = (1 / this.anilength) * this.anicount;
+
+                this.sourcebox.style.opacity = opacity;
+                this.clonebox.style.opacity = 1 - opacity;
+            }
+        };
+    </script>
+</body>
+</html>
