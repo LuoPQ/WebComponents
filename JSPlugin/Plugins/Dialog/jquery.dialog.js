@@ -3,6 +3,8 @@
 
     window.currentDrag = null;
 
+    var noDragTag = ["a", "input", "select", "option", "textarea"];
+
     var dragPara = {
         mouseX: null,
         mouseY: null,
@@ -64,6 +66,14 @@
                 "mousemove": function (event) {
                     if (currentDrag) {
                         event = event || window.event;
+
+                        var target = event.target || event.srcElement;
+
+                        var nodeName = target.nodeName.toLowerCase();
+                        if (noDragTag.indexOf(nodeName) > -1) {
+                            return;
+                        }
+
                         if (!event) {
                             currentDrag.onselectstart = function () {
                                 return false;
