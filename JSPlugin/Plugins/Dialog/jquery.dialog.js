@@ -35,7 +35,18 @@
                 //"position": "relative"
             });
 
-            $ele.on({
+            var $validEle = $ele.find(".validEle");
+            $validEle.on({
+                "mouseover": function () {
+                    $validEle.css("cursor", "move");
+                },
+                "mouseout": function () {
+                    $validEle.css("cursor", "default");
+                    that.clearDrag();
+                },
+                "mouseup": function () {
+                    that.clearDrag();
+                },
                 "mousedown": function (event) {
                     event = event || window.event;
 
@@ -49,30 +60,9 @@
                     dragPara.zIndex = $ele.parent().css("z-index");
                     $ele.css("z-index", ++dragPara.zIndex);
                 },
-                "mouseover": function () {
-                    $ele.css("cursor", "move");
-                },
-                "mouseout": function () {
-                    $ele.css("cursor", "default");
-
-                }
-            });
-
-
-            $(document).on({
-                "mouseup": function () {
-                    that.clearDrag();
-                },
                 "mousemove": function (event) {
                     if (currentDrag) {
                         event = event || window.event;
-
-                        var target = event.target || event.srcElement;
-
-                        var nodeName = target.nodeName.toLowerCase();
-                        if (noDragTag.indexOf(nodeName) > -1) {
-                            return;
-                        }
 
                         if (!event) {
                             currentDrag.onselectstart = function () {
@@ -93,43 +83,13 @@
                             "left": (moveLeft > 0 ? moveLeft : 0) + "px",
                             "top": (moveTop > 0 ? moveTop : 0) + "px"
                         });
-
-                        //将onmousemove设置为null,提高性能，再使用定时器将事件绑定
-                        //document.onmousemove = null;
-                        //setTimeout(function () {
-                        //    document.onmousemove = that.move;
-                        //}, 30);
                     }
                 }
             })
 
-            $(window).on("blur", function () {
-                that.clearDrag();
-            })
-        },
-        move: function (event) {
-            //if (currentDrag) {
-            //    var that = this;
-            //    event = event || window.event;
-            //    if (!event) {
-            //        currentDrag.onselectstart = function () {
-            //            return false;
-            //        }
-            //    }
-            //    //.style.position = "relative";
-
-            //    this.$ele.css({
-            //        "position": "relative",
-            //        "left": parseInt(event.clientX) + this.$ele.scrollLeft() - dragPara.mouseX + dragPara.objX + "px",
-            //        "top": parseInt(event.clientY) + this.$ele.scrollTop() - dragPara.mouseY + dragPara.objY + "px"
-            //    });
-
-            //    //将onmousemove设置为null,提高性能，再使用定时器将事件绑定
-            //    document.onmousemove = null;
-            //    setTimeout(function () {
-            //        document.onmousemove = that.move;
-            //    }, 30);
-            //}
+            //$(window).on("blur", function () {
+            //    that.clearDrag();
+            //})
         },
         forbid: function () {
 

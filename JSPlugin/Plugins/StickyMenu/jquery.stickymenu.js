@@ -55,7 +55,8 @@
         //切换隐藏的区域
         var toggleHashes = [];
 
-        function stickyMenu(i, $ele) {
+        function stickyMenu() {
+
             var scrollTop = $(window).scrollTop();
 
             if (scrollTop > offsetTop) {
@@ -76,12 +77,14 @@
 
             }
 
-            if ((sectionRange[i].top > scrollTop + 1 && (scrollTop + windowHeight) > sectionRange[i].bottom) ||
-                (sectionRange[i].top < scrollTop + 1 && (scrollTop + windowHeight) < sectionRange[i].bottom)) {
-                $links.removeClass(options.activeClass);
-                $ele.addClass(options.activeClass);
+            for (var i = 0; i < $links.length; i++) {
+                if ((sectionRange[i].top > scrollTop + 1 && (scrollTop + windowHeight) > sectionRange[i].bottom) ||
+                    (sectionRange[i].top < scrollTop + 1 && (scrollTop + windowHeight) < sectionRange[i].bottom)) {
+                    $links.removeClass(options.activeClass);
+                    $links.eq(i).addClass(options.activeClass);
+                    break;
+                }
             }
-
 
             //第一个链接
             if (scrollTop == 0) {
@@ -126,14 +129,22 @@
                 return false;
             })
 
-            if ($(window).scrollTop() > 0) {
-                stickyMenu(i, $ele);
-            }
+            //if ($(window).scrollTop() > 0) {
+            //    stickyMenu(i, $ele);
+            //}
 
-            $(window).on("scroll", function () {
-                stickyMenu(i, $ele);
-            })
+            //$(window).on("scroll", function () {
+            //    stickyMenu(i, $ele)
+            //})
         });
+
+        if ($(window).scrollTop() > 0) {
+            stickyMenu();
+        }
+
+        $(window).on("scroll", function () {
+            stickyMenu();
+        })
 
 
         $(".toggle").on("click", function () {
