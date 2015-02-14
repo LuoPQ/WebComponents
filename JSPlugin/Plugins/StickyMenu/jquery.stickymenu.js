@@ -61,7 +61,8 @@
             if (scrollTop > offsetTop) {
                 $menu.css({
                     "position": "fixed",
-                    "top": 0
+                    "top": 0,
+                    "left": options.menuLeft ? options.menuLeft : "auto"
                 });
                 $body.css('padding-top', menuHeight);
             }
