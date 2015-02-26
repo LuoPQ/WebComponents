@@ -65,7 +65,7 @@
                     "top": 0,
                     "left": options.menuLeft ? options.menuLeft : "auto"
                 });
-                $body.css('padding-top', menuHeight);
+                //$body.css('padding-top', menuHeight);
             }
             else {
                 $menu.css({
@@ -73,7 +73,7 @@
                     "left": originLeft,
                     "top": originTop
                 })
-                $body.css('padding-top', 0);
+                //$body.css('padding-top', 0);
 
             }
 

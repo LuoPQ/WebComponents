@@ -2,6 +2,7 @@
     "use strict";
 
     window.currentDrag = null;
+    window.validEle = null;
 
     var noDragTag = ["a", "input", "select", "option", "textarea"];
 
@@ -15,6 +16,7 @@
 
     function Drag($ele, options) {
         this.$ele = $ele;
+        this.$validEle = $ele.find(".validEle");
         this.options = options;
         this.init();
     }
@@ -29,23 +31,18 @@
             var $ele = this.$ele;
             var that = this;
 
-            //ele.style.marginTop = (parseInt(ele.style.marginTop) + scroll.top) + "px";
             $ele.css({
                 "marginTop": (parseInt($ele.css("marginTop")) + $ele.scrollTop()) + "px"
-                //"position": "relative"
             });
 
-            var $validEle = $ele.find(".validEle");
+            var $validEle = that.$validEle;
+
             $validEle.on({
                 "mouseover": function () {
                     $validEle.css("cursor", "move");
                 },
                 "mouseout": function () {
                     $validEle.css("cursor", "default");
-                    that.clearDrag();
-                },
-                "mouseup": function () {
-                    that.clearDrag();
                 },
                 "mousedown": function (event) {
                     event = event || window.event;
@@ -54,14 +51,22 @@
                     dragPara.mouseY = parseInt(event.clientY) + $ele.scrollTop();
 
                     currentDrag = $ele;
+                    validEle = $validEle;
+
                     dragPara.objX = parseInt($ele.offset().left) || 0;
                     dragPara.objY = parseInt($ele.offset().top) || 0;
 
                     dragPara.zIndex = $ele.parent().css("z-index");
                     $ele.css("z-index", ++dragPara.zIndex);
+                }
+            })
+
+            $(document).on({
+                "mouseup": function () {
+                    that.clearDrag();
                 },
                 "mousemove": function (event) {
-                    if (currentDrag) {
+                    if (currentDrag && validEle) {
                         event = event || window.event;
 
                         if (!event) {
@@ -87,15 +92,16 @@
                 }
             })
 
-            //$(window).on("blur", function () {
-            //    that.clearDrag();
-            //})
+            $(window).on("blur", function () {
+                that.clearDrag();
+            })
         },
         forbid: function () {
 
         },
         clearDrag: function () {
             currentDrag = null;
+            validEle = null;
         }
     };
 
