@@ -101,7 +101,7 @@
         },
         renderHtml: function () {
 
-            var $container = $('<dl class="datepicker"></dl>');
+            var $container = $('<dl class="datepicker" style="display:none"></dl>');
 
             $(document.body).append($container);
             this.$container = $container;
@@ -109,6 +109,8 @@
 
         },
         refresh: function () {
+
+            this.$ele.attr("readonly", "readonly");
 
             var currentYear = this.currentDate.getFullYear();
             var currentMonth = this.currentDate.getMonth();

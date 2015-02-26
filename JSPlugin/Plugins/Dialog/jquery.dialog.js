@@ -128,18 +128,8 @@
                 $(document.body).prepend($mask);
                 this.$mask = $mask;
             }
-            var position = this.options.fixed ? "fixed" : "absolute";
 
-            var $window = $(window);
-            this.$ele.css({
-                "z-index": parseInt($mask && $mask.css("z-index") || 999, 10) + 1,
-                "position": position,
-                "top": ($window.height() - this.$ele.height()) / 2,
-                "left": ($window.width() - this.$ele.width()) / 2,
-                "display": "none",
-                "marginTop": 0,
-                "marginLeft": 0
-            })
+            this.setPosition();
 
             this.bindEvent();
         },
@@ -158,8 +148,22 @@
                 $.drag(that.$ele);
             }
         },
+        setPosition: function () {
+            var position = this.options.fixed ? "fixed" : "absolute";
+            var $window = $(window);
+            this.$ele.css({
+                "z-index": parseInt(this.$mask && this.$mask.css("z-index") || 999, 10) + 1,
+                "position": position,
+                "top": ($window.height() - this.$ele.height()) / 2,
+                "left": ($window.width() - this.$ele.width()) / 2,
+                "display": "none",
+                "marginTop": 0,
+                "marginLeft": 0
+            })
+        },
         show: function () {
             this.$mask && this.$mask.show();
+            this.setPosition();
             this.$ele.slideDown("fast");
         },
         hide: function () {
