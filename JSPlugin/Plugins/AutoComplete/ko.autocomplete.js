@@ -89,6 +89,7 @@
             default:
                 self.optionsVisible(true);
         }
+        //return true;
     }
 
     //鼠标点击选择事件
@@ -103,27 +104,7 @@
 
     };
 
-    ko.bindingHandlers.autoComplete = {
-        init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-            var template = '<input class="autocomplete-txt" type="text" data-bind="value:searchTerm,valueUpdate:\'afterkeydown\',event:{\'keyup\':function(data,event){keyupHandler(event);},\'blur\':hideOptionList}" />\
-            <ul class="autocomplete-opt" data-bind="visible:optionsVisible&&validOptions().length > 0 , foreach:validOptions">\
-                <!--ko if:$parent.templateName-->\
-                <li data-bind="template:{name:$parent.templateName,data:$data},css:{\'select\':$index() == $parent.curIndex() },click:function(){$parent.clickHandler($index());}"></li>\
-                <!--/ko-->\
-                <!--ko ifnot:$parent.templateName-->\
-                <li data-bind="html:$data,css:{\'select\':$index() == $parent.curIndex() },click:function(){$parent.clickHandler($index());}"></li>\
-                <!--/ko-->\
-            </ul>'
-            var $container = $("<div></div>");
-            $container.html(template).attr("data-bind", "with:autoVM");
-            $(element).after($container);
-        },
-        update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-            // This will be called once when the binding is first applied to an element,
-            // and again whenever any observables/computeds that are accessed change
-            // Update the DOM element based on the supplied values here.
-        }
-    };
+
 
     ko.components.register("ko-auto-complete", {
         viewModel: {
