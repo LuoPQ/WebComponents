@@ -1,13 +1,174 @@
 ﻿@{
     ViewBag.Title = "模板生成器";
 }
+<h1 class="text-center">基本功能</h1>
+<button class="btn btn-primary pull-right" data-toggle="modal" data-target="#newTitleModal" data-bind="click:addNew">
+    <span class="glyphicon glyphicon-plus"></span> 添加章节
+</button>
+<br />
+<br />
 <div class="row">
-    <div class="col-md-3">
-        <ul class="nav nav-pills nav-stacked">
-            <li class="active"><a href="#">基本功能</a></li>
-            <li><a href="#">高级功能</a></li>
+    <div class="col-md-3" id="sideArea">
+        @*<!--ko template:{name:'koItemTmpl',data:itemList}-->
+        <!--/ko-->*@
+        <ul class="nav nav-pills nav-stacked " data-bind="foreach:itemList">
+            <li data-bind="click:select,css:{'active':currentItem()==$data}">
+                <a href='javascript:;'>
+                    <!--ko text:index+"、"+title()--><!--/ko-->
+                    <span class='glyphicon glyphicon-trash pull-right' data-bind="click:del" data-toggle="modal" data-target="#newTitleModal"></span>
+                    <span class='glyphicon glyphicon-erase pull-right' data-bind="click:reName" data-toggle="modal" data-target="#newTitleModal"></span>
+                    @*<span class='glyphicon glyphicon-plus-sign pull-right' data-bind="click:addSon"></span>
+                <span class='glyphicon glyphicon-plus pull-right' data-bind="click:addSibling"></span>*@
+                </a>
+            </li>
         </ul>
     </div>
-    <div class="col-md-9">内容</div>
+    <div class="col-md-9" id="mainArea">
+
+    </div>
 </div>
 
+@*添加新标题弹出框*@
+<div class="modal fade" id="newTitleModal">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" data-bind="text:modalTitle"></h4>
+            </div>
+            <div class="modal-body">
+                <p data-bind="visible:currentAction()==actionType.delSelf">确定删除“<!--ko text:currentTitle--><!--/ko-->”?</p>
+                <input type="text" class="form-control" placeholder="请输入章节标题" data-bind="value:currentTitle,visible:newOrEdit,hasFocus:newOrEdit">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bind="click:submitChange">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script type="text/template" id="koItemTmpl">
+    <ul class="nav nav-pills nav-stacked " data-bind="foreach:itemList">
+        <li>
+            <a href='javascript:;' data-bind="click:select,css:{'active':$parent.currentItem()==$data}">
+                <!--ko text:index+"、"+title()--><!--/ko-->
+                <span class='glyphicon glyphicon-trash pull-right' data-bind="click:del" data-toggle="modal" data-target="#newTitleModal"></span>
+                <span class='glyphicon glyphicon-erase pull-right' data-bind="click:reName" data-toggle="modal" data-target="#newTitleModal"></span>
+                @*<span class='glyphicon glyphicon-plus-sign pull-right' data-bind="click:addSon"></span>
+            <span class='glyphicon glyphicon-plus pull-right' data-bind="click:addSibling"></span>*@
+            </a>
+        </li>
+    </ul>
+</script>
+@section script{
+    <script src="~/Scripts/knockout-3.3.0.js"></script>
+    <script>
+
+
+        (function () {
+
+            var VM = function () {
+                var self = this;
+
+                function KoItem(index, title, level) {
+                    this.index = index;
+                    this.title = ko.observable(title);
+                    this.level = level;
+                }
+                KoItem.prototype = {
+                    constructor: KoItem,
+                    select: function () {
+                        console.log("test");
+                        self.currentItem(this);
+                    },
+                    addSibling: function () {
+                        console.log("添加兄弟节点");
+                    },
+                    addSon: function () {
+                        console.log("添加子节点");
+                    },
+                    reName: function () {
+                        self.currentAction(self.actionType.reName);
+                        self.currentTitle(this.title());
+                    },
+                    del: function () {
+                        self.currentAction(self.actionType.delSelf);
+                    }
+                };
+
+                self.actionType = {
+                    newSibling: {},
+                    newSon: {},
+                    reName: {},
+                    delSelf: {}
+                }
+
+                self.currentAction = ko.observable();
+
+                self.itemList = ko.observableArray();
+
+                self.addNew = function () {
+                    self.currentAction(self.actionType.newSibling);
+                }
+
+
+
+                //#region 模态窗口相关
+
+                //当前章节标题
+                self.currentTitle = ko.observable();
+
+                self.currentItem = ko.observable();
+
+                self.newOrEdit = ko.computed(function () {
+                    return currentAction() == actionType.newSibling || currentAction() == actionType.reName;
+                })
+
+                self.modalTitle = ko.computed(function () {
+                    switch (self.currentAction()) {
+                        case self.actionType.newSibling:
+                            return "添加新章节";
+                        case self.actionType.reName:
+                            return "修改章节标题";
+                        case self.actionType.delSelf:
+                            return "删除章节";
+                        default:
+                    };
+                })
+
+                self.submitChange = function () {
+
+                    switch (self.currentAction()) {
+                        case self.actionType.newSibling:
+                            var title = $.trim(self.currentTitle());
+                            if (title) {
+                                var itemIndex = self.itemList().length + 1;
+                                self.itemList.push(new KoItem(itemIndex, title, 0));
+
+                            }
+                            break;
+                        case self.actionType.reName:
+                            var title = $.trim(self.currentTitle());
+                            if (title) {
+                                self.currentItem().title(title);
+                            }
+                            break;
+                        case self.actionType.delSelf:
+                            self.itemList.remove(self.currentItem());
+                            break;
+                        default:
+                    };
+                    self.currentTitle("");
+                    $('#newTitleModal').modal('hide');
+                }
+
+                //#endregion
+
+            }
+
+            ko.applyBindings(VM);
+
+        })();
+    </script>
+}
