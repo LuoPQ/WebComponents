@@ -30,8 +30,11 @@
             else if (/(\d{8})/.test(s)) {
                 return eval(s.replace(/(\d{4})(\d{2})(\d{2})/, "new Date($1,parseInt($2)-1,$3)"));
             }
-            else if (/(\d{4})\W(\d{2})\W(\d{2})T(\d{2})\W(\d{2})\W(\d{2})/.test(s)) {
-                return eval(s.replace(/(\d{4})\W(\d{2})\W(\d{2})T(\d{2})\W(\d{2})\W(\d{2})[\w\W]*/, "new Date($1,parseInt($2)-1,$3,$4,$5,$6)"));
+            else if (/(\d{4})[-/](\d{1,2})[-/](\d{1,2})[T\s](\d{1,2})\:(\d{1,2})(?:\:(\d{1,2}))?/.test(s)) {
+                return eval(s.replace(/(\d{4})[-/](\d{1,2})[-/](\d{1,2})[T\s](\d{1,2})\:(\d{1,2})(?:\:(\d{1,2}))?[\w\W]*/, "new Date($1,parseInt($2)-1,parseInt($3),parseInt($4),parseInt($5),parseInt($6)||0)"));
+            }
+            else if (/(\d{4})[-/](\d{1,2})[-/](\d{1,2})/.test(s)) {
+                return eval(s.replace(/(\d{4})[-/](\d{1,2})[-/](\d{1,2})/, "new Date($1,parseInt($2)-1,$3)"));
             }
             try {
                 return new Date(s);
@@ -46,6 +49,14 @@
     //#endregion
 
     //#region 节假日数据
+
+    //pickerType
+    var pickerTypes = {
+        year: {},
+        month: {},
+        day: {}
+    };
+
 
     //星期几名称
     var weekdayNames = ["日", "一", "二", "三", "四", "五", "六"];
@@ -88,7 +99,10 @@
         this.$ele = $ele;
         this.options = options;
         this.$container = null;
+        this.currentYear = null;
+        this.currentMonth = null;
         this.currentDate = options.currentDate || new Date();
+        this.pickerType = pickerTypes.day;
         this.init();
     }
 
@@ -97,6 +111,10 @@
         constructor: DatePicker,
 
         init: function () {
+            this.$ele.val(this.options.initDate);
+            this.options.minDate = new Date().parse(this.options.minDate);
+            this.options.maxDate = new Date().parse(this.options.maxDate);
+            
             this.renderHtml();
         },
         renderHtml: function () {
@@ -105,6 +123,7 @@
 
             $(document.body).append($container);
             this.$container = $container;
+
             this.refresh();
 
         },
@@ -112,13 +131,27 @@
 
             this.$ele.attr("readonly", "readonly");
 
-            var currentYear = this.currentDate.getFullYear();
-            var currentMonth = this.currentDate.getMonth();
+            var currentYear = this.currentYear || this.currentDate.getFullYear();
+            var currentMonth = this.currentMonth || this.currentDate.getMonth();
 
-            var titleHtml = this.createTitleHtml(currentYear, currentMonth);
-            var dateListHtml = this.createDateListHtml(currentYear, currentMonth);
-
-            this.$container.html("").append(titleHtml).append(dateListHtml);
+            switch (this.pickerType) {
+                case pickerTypes.year:
+                    var yearTitleHtml = this.createTitleHtml(currentYear, currentMonth, pickerTypes.year);
+                    var yearListHtml = this.createYearListHtml(currentYear);
+                    this.$container.html("").append(yearTitleHtml).append(yearListHtml);
+                    break;
+                case pickerTypes.month:
+                    var monthTitleHtml = this.createTitleHtml(currentYear, currentMonth, pickerTypes.month);
+                    var monthListHtml = this.createMonthListHtml(currentYear);
+                    this.$container.html("").append(monthTitleHtml).append(monthListHtml);
+                    break;
+                case pickerTypes.day:
+                default:
+                    var dayTitleHtml = this.createTitleHtml(currentYear, currentMonth, pickerTypes.day);
+                    var dayListHtml = this.createDateListHtml(currentYear, currentMonth);
+                    this.$container.html("").append(dayTitleHtml).append(dayListHtml);
+                    break;
+            }
 
             var inputVal = this.$ele.val();
             if (inputVal) {
@@ -128,23 +161,77 @@
 
             this.bindEvent();
         },
-        createTitleHtml: function (currentYear, currentMonth) {
+        createTitleHtml: function (currentYear, currentMonth, pickerType) {
+
+            var title = "";
+            switch (pickerType) {
+                case pickerTypes.year:
+                    var minYear = parseInt(currentYear / 10) * 10;
+                    title = minYear + "-" + (minYear + 9);
+                    break;
+                case pickerTypes.month:
+                    title = currentYear + '年';
+                    break;
+                case pickerTypes.day:
+                default:
+                    title = currentYear + '年' + (currentMonth + 1) + '月';
+                    break;
+            }
+
             var titleHtmls =
-                ['<dt class="month">',
-                    '<a href="javascript:;" class="month-prev"></a>',
-                    '<span>' + currentYear + '年' + (currentMonth + 1) + '月</span>',
-                    '<a href="javascript:;" class="month-next"></a>',
+                ['<dt class="date-action">',
+                    '<a href="javascript:;" class="prev"></a>',
+                    '<span>' + title + '</span>',
+                    '<a href="javascript:;" class="next"></a>',
                 "</dt>"];
 
-            $.each(weekdayNames, function (index, value) {
-                titleHtmls.push('<dt class="week">' + value + '</dt>');
-            })
+
+            if (pickerType == pickerTypes.day) {
+                $.each(weekdayNames, function (index, value) {
+                    titleHtmls.push('<dt class="week">' + value + '</dt>');
+                })
+            }
 
             return titleHtmls.join("");
         },
+        createYearListHtml: function (currentYear) {
+            var yearHtml = [];
+
+            yearHtml.push('<dd class="clearfix date-unit year">');
+
+            var yearList = this.getYearList(currentYear);
+            for (var i = 0; i < yearList.length; i++) {
+                var year = yearList[i];
+
+                var className = "";
+                year.disabled && (className += " disabled");
+                yearHtml.push('<a href="javascript:;" class="' + className + '">' + year.year + '</a>');
+            }
+
+            yearHtml.push('</dd>');
+
+            return yearHtml.join("");
+        },
+        createMonthListHtml: function (currentYear) {
+            var monthHtml = [];
+
+            monthHtml.push('<dd class="clearfix date-unit month">');
+
+            var monthList = this.getMonthList();
+            for (var i = 0; i < monthList.length; i++) {
+                var month = monthList[i];
+                var className = "";
+                monthHtml.push('<a month="' + month.month + '" href="javascript:;" class="' + className + '">' + month.monthText + '</a>');
+            }
+
+            monthHtml.push('</dd>');
+
+            return monthHtml.join("");
+        },
         createDateListHtml: function (currentYear, currentMonth) {
             var dateHtml = [];
-            dateHtml.push('<dd class="clearfix">');
+
+            dateHtml.push('<dd class="clearfix date-unit day">');
 
             var dateList = this.getDateList(currentYear, currentMonth);
             for (var i = 0; i < dateList.length; i++) {
@@ -153,16 +240,31 @@
                 var className = "";
                 date.disabled && (className += " disabled");
                 date.isHoliday && (className += " holiday");
-                //if (date.isSelected) {
-                //    className += " select";
-                //}
-
                 dateHtml.push('<a date="' + date.format() + '" href="javascript:;" class="' + className + '">' + date.dateText + '</a>');
             }
 
             dateHtml.push('</dd>');
 
             return dateHtml.join("");
+        },
+        getYearList: function (currentYear) {
+            var minYear = parseInt(currentYear / 10) * 10;
+            var maxYear = minYear + 9;
+
+            var list = [];
+            for (var startYear = minYear - 1, endYear = maxYear + 1; startYear <= endYear; startYear++) {
+                list.push(this.createYear(startYear, startYear < minYear || startYear > maxYear));
+            }
+
+            return list;
+        },
+        getMonthList: function () {
+
+            var list = [];
+            for (var i = 0; i < 12; i++) {
+                list.push(this.createMonth(i + 1));
+            }
+            return list;
         },
         getDateList: function (currentYear, currentMonth) {
 
@@ -181,6 +283,18 @@
             }
 
             return list;
+        },
+        createYear: function (year, disabled) {
+            return {
+                year: year,
+                disabled: disabled
+            }
+        },
+        createMonth: function (month) {
+            return {
+                month: month,
+                monthText: month + "月"
+            }
         },
         createDate: function (date, month) {
 
@@ -217,25 +331,53 @@
         },
         bindEvent: function () {
             var that = this;
+
+            that.$container.find(".date-action").on("click", function () {
+                switch (that.pickerType) {
+                    case pickerTypes.year:
+                        break;
+                    case pickerTypes.month:
+                        that.pickerType = pickerTypes.year;
+                        that.refresh();
+                        break;
+                    case pickerTypes.day:
+                    default:
+                        that.pickerType = pickerTypes.month;
+                        that.refresh();
+                        break;
+                }
+            });
+
             that.$container.find("dd>a").on("click", function () {
                 var $this = $(this);
                 if (!$this.hasClass("disabled")) {
-                    var date = $this.attr("date");
-                    that.selectDate(date);
 
-                    //var inputVal = $(this).val();
-                    //if (inputVal) {
-                    that.$container.find("dd .select").removeClass("select");
-                    that.$container.find("dd>[date=" + date + "]").addClass("select");
-                    //}
+                    switch (that.pickerType) {
+                        case pickerTypes.year:
+                            break;
+                        case pickerTypes.month:
+                            break;
+                        case pickerTypes.day:
+                        default:
+                            var date = $this.attr("date");
+                            that.selectDate(date);
+                            //var inputVal = $(this).val();
+                            //if (inputVal) {
+                            that.$container.find("dd .select").removeClass("select");
+                            that.$container.find("dd>[date=" + date + "]").addClass("select");
+                            //}
+                            break;
+                    }
                 }
 
             });
-            that.$container.find("dt .month-prev").on("click", function () {
+            that.$container.find("dt .prev").on("click", function (event) {
                 that.prevMonth();
+                that.stopBubble(event);
             });
-            that.$container.find("dt .month-next").on("click", function () {
+            that.$container.find("dt .next").on("click", function (event) {
                 that.nextMonth();
+                that.stopBubble(event);
             });
             that.$ele.on({
                 "click": function (event) {
@@ -279,6 +421,13 @@
             this.options.onDateSelected && this.options.onDateSelected(date);
             this.hide();
         },
+        focus: function () {
+            this.$ele.focus();
+            if (this.pickerType != pickerTypes.day) {
+                this.pickerType == pickerTypes.day;
+                this.refresh();
+            }
+        },
         hide: function () {
             this.$container.hide();
         },
@@ -297,7 +446,6 @@
                 "z-Index": 9999,
                 "display": "none"
             });
-
             this.$container.show();
         },
         setMinDate: function (minDate) {

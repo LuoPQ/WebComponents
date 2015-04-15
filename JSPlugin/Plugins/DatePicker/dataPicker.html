@@ -7,30 +7,79 @@
         .clear { clear: both; }
         .clearfix { zoom: 1; }
             .clearfix:after { clear: both; content: ""; display: block; height: 0; line-height: 0; visibility: hidden; }
+
+
         .datepicker { border-color: #ff8f00; background: none repeat scroll 0 0 #fff; box-shadow: 1px 1px 3px #333333; width: 230px; position: relative; padding: 5px; }
-            .datepicker .month-prev, .datepicker .month-next { border-radius: 5px; border: 1px solid #ccc; cursor: pointer; height: 20px; width: 20px; }
-            .datepicker .month-prev { float: left; }
-            .datepicker .month-next { float: right; }
-                .datepicker .month-prev:before, .datepicker .month-next:before { content: ""; display: block; position: relative; left: 7px; top: 4px; width: 0; height: 0; border-bottom: 6px dashed transparent; border-top: 6px dashed transparent; }
-            .datepicker .month-prev:before { border-right: 6px solid #ff8f00; }
-            .datepicker .month-next:before { border-left: 6px solid #ff8f00; }
+            .datepicker .date-action { width: 100%; font-weight: 700; padding-bottom: 5px; }
+                .datepicker .date-action .prev, .datepicker .date-action .next { border-radius: 5px; border: 1px solid #ccc; cursor: pointer; height: 20px; width: 20px; }
+                .datepicker .date-action .prev { float: left; }
+                .datepicker .date-action .next { float: right; }
+                    .datepicker .date-action .prev:before, .datepicker .date-action .next:before { content: ""; display: block; position: relative; left: 7px; top: 4px; width: 0; height: 0; border-bottom: 6px dashed transparent; border-top: 6px dashed transparent; }
+                .datepicker .date-action .prev:before { border-right: 6px solid #ff8f00; }
+                .datepicker .date-action .next:before { border-left: 6px solid #ff8f00; }
+                .datepicker .date-action span { cursor: pointer; }
             .datepicker dl { text-align: center; color: #404040; font: 12px/22px Georgia; }
-                .datepicker dl .month { width: 100%; font-weight: 700; padding-bottom: 5px; }
-                .datepicker dl .week { display: inline-block; float: left; height: 24px; line-height: 24px; width: 32px; border-bottom: 1px solid #ccc; border-top: 1px solid #ccc; }
-            .datepicker dd a { color: #404040; display: inline-block; height: 25px; line-height: 22px; margin: 1px 1px 0; outline: medium none; overflow: hidden; text-decoration: none; width: 30px; cursor: pointer; text-align: center; float: left; }
-                .datepicker dd .select, .datepicker dd a:hover { background-color: #ff8f00; color: #fff; }
-            .datepicker dd span { font-weight: bold; font-size: 10px; }
-            .datepicker dd .today { color: #ff8f00; }
-            .datepicker dd .disabled, .datepicker dd .disabled:hover { background-color: transparent; color: #999; cursor: default; }
+        .date-unit a { color: #404040; cursor: pointer; display: inline-block; float: left; outline: medium none; overflow: hidden; text-align: center; text-decoration: none; }
+        /*月份*/
+        .datepicker .year a,.datepicker .month a { height: 35px; line-height: 35px; margin: 3px 3px 0; width: 50px; }
+        /*日期*/
+        .datepicker .week { display: inline-block; float: left; height: 24px; line-height: 24px; width: 32px; border-bottom: 1px solid #ccc; border-top: 1px solid #ccc; }
+        .datepicker .day a { height: 25px; line-height: 22px; margin: 1px 1px 0; width: 30px; }
+        .datepicker dd .select, .datepicker dd a:hover { background-color: #ff8f00; color: #fff; }
+        .datepicker dd span { font-weight: bold; font-size: 10px; }
+        .datepicker dd .today { color: #ff8f00; }
+        .datepicker dd .disabled, .datepicker dd .disabled:hover { background-color: transparent; color: #999; cursor: default; }
     </style>
 </head>
 <body>
     <div class="datepicker">
-        <dl>
-            <dt class="month">
-                <a href="javascript:;" class="month-prev"></a>
+        <dl class="yearSelector">
+            <dt class="date-action">
+                <a href="javascript:;" class="prev"></a>
+                <span>2010-2019</span>
+                <a href="javascript:;" class="next"></a>
+            </dt>
+            <dd class="clearfix date-unit year">
+                <a class="disabled">2010</a>
+                <a>2011</a>
+                <a>2012</a>
+                <a>2013</a>
+                <a>2014</a>
+                <a>2015</a>
+                <a>2016</a>
+                <a>2017</a>
+                <a>2018</a>
+                <a>2019</a>
+                <a>2020</a>
+                <a class="disabled">2021</a>
+            </dd>
+        </dl>
+        <dl class="monthSelector" style="display:none">
+            <dt class="date-action">
+                <a href="javascript:;" class="prev"></a>
+                <span>2015年</span>
+                <a href="javascript:;" class="next"></a>
+            </dt>
+            <dd class="clearfix date-unit month">
+                <a>1月</a>
+                <a>2月</a>
+                <a>3月</a>
+                <a>4月</a>
+                <a>5月</a>
+                <a>6月</a>
+                <a>7月</a>
+                <a>8月</a>
+                <a>9月</a>
+                <a>10月</a>
+                <a>11月</a>
+                <a>12月</a>
+            </dd>
+        </dl>
+        <dl class="daySelector" style="">
+            <dt class="date-action">
+                <a href="javascript:;" class="prev"></a>
                 <span>2015年3月</span>
-                <a href="javascript:;" class="month-next"></a>
+                <a href="javascript:;" class="next"></a>
             </dt>
             <dt class="week">日</dt>
             <dt class="week">一</dt>
@@ -39,7 +88,7 @@
             <dt class="week">四</dt>
             <dt class="week">五</dt>
             <dt class="week">六</dt>
-            <dd class="clearfix">
+            <dd class="clearfix date-unit day">
                 <a href="javascript:;" class="disabled"></a>
                 <a href="javascript:;" class="disabled"></a>
                 <a href="javascript:;" class="disabled"></a>
@@ -76,7 +125,6 @@
                 <a href="javascript:;" class="">30</a>
                 <a href="javascript:;" class="today">31</a>
             </dd>
-
         </dl>
     </div>
 </body>
