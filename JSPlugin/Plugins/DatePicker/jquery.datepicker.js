@@ -1,7 +1,4 @@
 ﻿; (function ($) {
-    "use strict";
-
-
     //#region Date扩展
 
     //计算当前日期与指定日期相差的天数
@@ -114,7 +111,7 @@
             this.$ele.val(this.options.initDate);
             this.options.minDate = new Date().parse(this.options.minDate);
             this.options.maxDate = new Date().parse(this.options.maxDate);
-            
+
             this.renderHtml();
         },
         renderHtml: function () {
@@ -128,27 +125,25 @@
 
         },
         refresh: function () {
-
             this.$ele.attr("readonly", "readonly");
 
-            var currentYear = this.currentYear || this.currentDate.getFullYear();
-            var currentMonth = this.currentMonth || this.currentDate.getMonth();
-
+            this.currentYear = this.currentYear || this.currentDate.getFullYear();
+            this.currentMonth = this.currentMonth || this.currentDate.getMonth();
             switch (this.pickerType) {
                 case pickerTypes.year:
-                    var yearTitleHtml = this.createTitleHtml(currentYear, currentMonth, pickerTypes.year);
-                    var yearListHtml = this.createYearListHtml(currentYear);
+                    var yearTitleHtml = this.createTitleHtml(this.currentYear, this.currentMonth, pickerTypes.year);
+                    var yearListHtml = this.createYearListHtml(this.currentYear);
                     this.$container.html("").append(yearTitleHtml).append(yearListHtml);
                     break;
                 case pickerTypes.month:
-                    var monthTitleHtml = this.createTitleHtml(currentYear, currentMonth, pickerTypes.month);
-                    var monthListHtml = this.createMonthListHtml(currentYear);
+                    var monthTitleHtml = this.createTitleHtml(this.currentYear, this.currentMonth, pickerTypes.month);
+                    var monthListHtml = this.createMonthListHtml(this.currentYear);
                     this.$container.html("").append(monthTitleHtml).append(monthListHtml);
                     break;
                 case pickerTypes.day:
                 default:
-                    var dayTitleHtml = this.createTitleHtml(currentYear, currentMonth, pickerTypes.day);
-                    var dayListHtml = this.createDateListHtml(currentYear, currentMonth);
+                    var dayTitleHtml = this.createTitleHtml(this.currentYear, this.currentMonth, pickerTypes.day);
+                    var dayListHtml = this.createDateListHtml(this.currentYear, this.currentMonth);
                     this.$container.html("").append(dayTitleHtml).append(dayListHtml);
                     break;
             }
@@ -156,9 +151,13 @@
             var inputVal = this.$ele.val();
             if (inputVal) {
                 this.$container.find("dd .select").removeClass("select");
+                var selectedDate = new Date().parse(inputVal);
+           
+                this.$container.find("dd>[year=" + selectedDate.getFullYear() + "]").addClass("select");
+                this.$container.find("dd>[month=" + selectedDate.getMonth() + "]").addClass("select");
                 this.$container.find("dd>[date=" + inputVal + "]").addClass("select");
             }
-
+            this.$container.find(".date-unit").hide().fadeIn();
             this.bindEvent();
         },
         createTitleHtml: function (currentYear, currentMonth, pickerType) {
@@ -166,8 +165,8 @@
             var title = "";
             switch (pickerType) {
                 case pickerTypes.year:
-                    var minYear = parseInt(currentYear / 10) * 10;
-                    title = minYear + "-" + (minYear + 9);
+                    var yearRange = this.getYearRange(currentYear);
+                    title = yearRange.minYear + "-" + yearRange.maxYear;
                     break;
                 case pickerTypes.month:
                     title = currentYear + '年';
@@ -205,7 +204,7 @@
 
                 var className = "";
                 year.disabled && (className += " disabled");
-                yearHtml.push('<a href="javascript:;" class="' + className + '">' + year.year + '</a>');
+                yearHtml.push('<a year="' + year.year + '" href="javascript:;" class="' + className + '">' + year.year + '</a>');
             }
 
             yearHtml.push('</dd>');
@@ -248,12 +247,11 @@
             return dateHtml.join("");
         },
         getYearList: function (currentYear) {
-            var minYear = parseInt(currentYear / 10) * 10;
-            var maxYear = minYear + 9;
+            var yearRange = this.getYearRange(currentYear);
 
             var list = [];
-            for (var startYear = minYear - 1, endYear = maxYear + 1; startYear <= endYear; startYear++) {
-                list.push(this.createYear(startYear, startYear < minYear || startYear > maxYear));
+            for (var startYear = yearRange.minYear - 1, endYear = yearRange.maxYear + 1; startYear <= endYear; startYear++) {
+                list.push(this.createYear(startYear, startYear < yearRange.minYear || startYear > yearRange.maxYear));
             }
 
             return list;
@@ -262,7 +260,7 @@
 
             var list = [];
             for (var i = 0; i < 12; i++) {
-                list.push(this.createMonth(i + 1));
+                list.push(this.createMonth(i));
             }
             return list;
         },
@@ -293,7 +291,7 @@
         createMonth: function (month) {
             return {
                 month: month,
-                monthText: month + "月"
+                monthText: (month + 1) + "月"
             }
         },
         createDate: function (date, month) {
@@ -329,6 +327,14 @@
             }
             return dateInfo;
         },
+        getYearRange: function (currentYear) {
+            var minYear = parseInt(currentYear / 10) * 10;
+            var maxYear = minYear + 9;
+            return {
+                minYear: minYear,
+                maxYear: maxYear
+            };
+        },
         bindEvent: function () {
             var that = this;
 
@@ -351,44 +357,45 @@
             that.$container.find("dd>a").on("click", function () {
                 var $this = $(this);
                 if (!$this.hasClass("disabled")) {
-
                     switch (that.pickerType) {
                         case pickerTypes.year:
+                            that.currentYear = parseInt($this.attr("year"));
+                            that.pickerType = pickerTypes.month;
+                            that.refresh();
                             break;
                         case pickerTypes.month:
+                            that.currentMonth = parseInt($this.attr("month"));
+                            that.pickerType = pickerTypes.day;
+                            that.refresh();
                             break;
                         case pickerTypes.day:
                         default:
                             var date = $this.attr("date");
                             that.selectDate(date);
-                            //var inputVal = $(this).val();
-                            //if (inputVal) {
                             that.$container.find("dd .select").removeClass("select");
                             that.$container.find("dd>[date=" + date + "]").addClass("select");
-                            //}
                             break;
                     }
                 }
 
             });
             that.$container.find("dt .prev").on("click", function (event) {
-                that.prevMonth();
+                that.prev();
                 that.stopBubble(event);
             });
             that.$container.find("dt .next").on("click", function (event) {
-                that.nextMonth();
+                that.next();
                 that.stopBubble(event);
             });
             that.$ele.on({
                 "click": function (event) {
-
-                    //that.show();
-
-                    //event = event || window.event;
-                    //event.stopPropagation();
                 },
                 "focus": function () {
                     that.show();
+                    if (that.pickerType != pickerTypes.day) {
+                        that.pickerType = pickerTypes.day;
+                        that.refresh();
+                    }
                 }
             });
 
@@ -408,13 +415,40 @@
                 }
             });
         },
-        prevMonth: function () {
-            this.currentDate.setMonth(this.currentDate.getMonth() - 1);
-            this.refresh();
+        prev: function () {
+            switch (this.pickerType) {
+                case pickerTypes.year:
+                    this.currentYear = this.currentYear - 10;
+                    this.refresh();
+                    break;
+                case pickerTypes.month:
+                    this.currentYear--;
+                    this.refresh();
+                    break;
+                case pickerTypes.day:
+                default:
+                    this.currentMonth--;
+                    this.refresh();
+                    break;
+            }
         },
-        nextMonth: function () {
-            this.currentDate.setMonth(this.currentDate.getMonth() + 1);
-            this.refresh();
+        next: function () {
+
+            switch (this.pickerType) {
+                case pickerTypes.year:
+                    this.currentYear = this.currentYear + 10;
+                    this.refresh();
+                    break;
+                case pickerTypes.month:
+                    this.currentYear++;
+                    this.refresh();
+                    break;
+                case pickerTypes.day:
+                default:
+                    this.currentMonth++;
+                    this.refresh();
+                    break;
+            }
         },
         selectDate: function (date) {
             this.$ele.val(date);
@@ -423,10 +457,6 @@
         },
         focus: function () {
             this.$ele.focus();
-            if (this.pickerType != pickerTypes.day) {
-                this.pickerType == pickerTypes.day;
-                this.refresh();
-            }
         },
         hide: function () {
             this.$container.hide();
