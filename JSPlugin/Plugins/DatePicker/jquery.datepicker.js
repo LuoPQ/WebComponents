@@ -128,7 +128,7 @@
             this.$ele.attr("readonly", "readonly");
 
             this.currentYear = this.currentYear || this.currentDate.getFullYear();
-            this.currentMonth = this.currentMonth || this.currentDate.getMonth();
+            this.currentMonth = this.currentMonth > -1 ? this.currentMonth : this.currentDate.getMonth();
             switch (this.pickerType) {
                 case pickerTypes.year:
                     var yearTitleHtml = this.createTitleHtml(this.currentYear, this.currentMonth, pickerTypes.year);
@@ -152,7 +152,7 @@
             if (inputVal) {
                 this.$container.find("dd .select").removeClass("select");
                 var selectedDate = new Date().parse(inputVal);
-           
+
                 this.$container.find("dd>[year=" + selectedDate.getFullYear() + "]").addClass("select");
                 this.$container.find("dd>[month=" + selectedDate.getMonth() + "]").addClass("select");
                 this.$container.find("dd>[date=" + inputVal + "]").addClass("select");
