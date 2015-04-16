@@ -2,10 +2,13 @@
     "use strict";
 
     var defaults = {
-        "speed": 1000,
+        "scrollTimeSpan": 500,
+        "scrollTime": 4500,
         "direction": "left",
         "type": "gallery",//carousel or gallery,
-        "scrollCount": 1
+        "scrollCount": 1,
+        "scrollBack": true,
+        "onScrollToBottom": null
     }
 
     $.fn.slide = function (options) {
@@ -24,6 +27,8 @@
         var scrollLength = 0;
 
         $container.css({
+            "height": options.containerHeight || $container.height(),
+            "width": options.containerWidth || $container.width(),
             "overflow": "hidden",
             "position": "relative"
         });
@@ -31,6 +36,9 @@
         var sliderCss = {
             "position": "absolute"//保证Slide的position为absolute，必须脱离文档流才能滚动
         }
+
+        $slider.stop();
+
         switch (options.direction) {
             case "top":
             case "bottom":
@@ -72,14 +80,17 @@
                 //滑入停止动画，滑出开始动画.
                 $container.hover(function () {
                     clearInterval(timer);
+                    $slider.stop();
                 }, function () {
-                    timer = setInterval(function () {
-                        showImg(index)
-                        index++;
-                        if (index >= count) {//最后一张图片之后，转到第一张
-                            index = 0;
-                        }
-                    }, 3000);
+                    console.log(index);
+                    initTimer();
+                    //timer = setInterval(function () {
+                    //    showImg(index)
+                    //    index++;
+                    //    if (index >= count) {//最后一张图片之后，转到第一张
+                    //        index = 0;
+                    //    }
+                    //}, 3000);
                 }).trigger("mouseleave");
 
                 sliderCss = $.extend(sliderCss,
@@ -93,6 +104,26 @@
 
         }
         $slider.css(sliderCss);
+
+        ///初始化计时器
+        function initTimer() {
+            timer = setInterval(function () {
+                showImg(index)
+                index++;
+                if (index >= count) {//最后一张图片之后
+                    //如果支持反向滚动，则设置index为0
+                    if (options.scrollBack) {
+                        index = 0;
+                    }
+
+                    //如果有滚到底部的回调函数
+                    if (options.onScrollToBottom) {
+                        index = 0;
+                        options.onScrollToBottom();
+                    }
+                }
+            }, options.scrollTimeSpan);
+        }
 
         //重启计时器
         function restartTimer(index) {
