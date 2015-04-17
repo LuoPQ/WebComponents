@@ -1,6 +1,15 @@
 ﻿; (function ($) {
     //#region Date扩展
 
+    //添加指定单位的时间
+    Date.prototype.dateAdd = function (interval, number) {
+        var d = new Date(this);
+        var k = { 'y': 'FullYear', 'q': 'Month', 'm': 'Month', 'w': 'Date', 'd': 'Date', 'h': 'Hours', 'n': 'Minutes', 's': 'Seconds', 'ms': 'MilliSeconds' };
+        var n = { 'q': 3, 'w': 7 };
+        eval('d.set' + k[interval] + '(d.get' + k[interval] + '()+' + ((n[interval] || 1) * number) + ')');
+        return d;
+    }
+
     //计算当前日期与指定日期相差的天数
     Date.prototype.dateDiff = function (otherDate) {
         return (this.getTime() - otherDate.getTime()) / 1000 / 60 / 60 / 24;
@@ -128,7 +137,12 @@
             this.$ele.attr("readonly", "readonly");
 
             this.currentYear = this.currentYear || this.currentDate.getFullYear();
-            this.currentMonth = this.currentMonth > -1 ? this.currentMonth : this.currentDate.getMonth();
+            this.currentMonth = this.currentMonth != null ? this.currentMonth : this.currentDate.getMonth();
+
+            var currentDate = new Date(this.currentYear, this.currentMonth, 1);
+            this.currentYear = currentDate.getFullYear();
+            this.currentMonth = currentDate.getMonth();
+
             switch (this.pickerType) {
                 case pickerTypes.year:
                     var yearTitleHtml = this.createTitleHtml(this.currentYear, this.currentMonth, pickerTypes.year);
@@ -270,8 +284,8 @@
             var lastDay = new Date(currentYear, currentMonth + 1, 0);
             var list = [];
 
-            for (var i = 0; i < firstDay.getDay() ; i++) {
-                list.push(this.createDate(new Date(currentYear, currentMonth - 1, i), currentMonth));
+            for (var i = 0, length = firstDay.getDay() ; i < length ; i++) {
+                list.push(this.createDate(firstDay.dateAdd("d", i - length), currentMonth));
             }
             for (var i = 1; i <= lastDay.getDate() ; i++) {
                 list.push(this.createDate(new Date(currentYear, currentMonth, i), currentMonth));
