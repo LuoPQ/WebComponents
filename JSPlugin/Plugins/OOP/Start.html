@@ -1,0 +1,125 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Javascript组件化</title>
+</head>
+<body>
+    <input type="text" id="txt" />
+    <script src="../../Scripts/jquery-2.1.3.min.js"></script>
+    <script>
+        //1、最简单的写法
+        //$(function () {
+        //    var $txt = $("#txt");
+
+        //    //获取输入字符的长度
+        //    function getNum() {
+        //        return $txt.val().length;
+        //    }
+
+        //    //渲染元素
+        //    function render() {
+        //        var num = getNum();
+
+        //        if ($("#txtCount").length == 0) {
+        //            $txt.after("<span id='txtCount'></span>");
+        //        }
+
+        //        $("#txtCount").html(num + "个字");
+        //    }
+
+        //    $txt.on("keyup", function () {
+        //        render();
+        //    })
+
+        //    render();
+        //})
+
+        //2、作用域隔离
+        //var textCount = {
+        //    input: null,
+        //    init: function (config) {
+        //        this.input = $(config.id);
+        //        this.bind();
+
+        //        //返回this实现链式调用
+        //        return this;
+        //    },
+        //    bind: function () {
+        //        var self = this;
+        //        this.input.on("keyup", function () {
+        //            self.render();
+        //        });
+        //    },
+        //    getNum: function () {
+        //        return this.input.val().length;
+        //    },
+        //    render: function () {
+        //        var num = this.getNum();
+
+        //        if ($("#txtCount").length == 0) {
+        //            this.input.after("<span id='txtCount'></span>");
+        //        }
+
+        //        $("#txtCount").html(num + "个字");
+        //    }
+        //};
+
+        //$(function () {
+        //    textCount.init({
+        //        "id": "#txt"
+        //    }).render();
+        //})
+
+        //3、闭包写法封装私有方法
+        //var TextCount = (function () {
+
+        //    var bind = function (that) {
+        //        that.input.on("keyup", function () {
+        //            that.render();
+        //        });
+        //    };
+
+        //    var getNum = function (that) {
+        //        return that.input.val().length;
+        //    };
+
+        //    var TextCountFunc = function (config) {
+        //        this.config = $.extend(config || {});
+        //        this.input = null;
+        //    };
+
+        //    TextCountFunc.prototype = {
+        //        constructor: TextCountFunc,
+        //        init: function () {
+        //            this.input = $(this.config.id);
+        //            bind(this);
+        //            this.render();
+        //            return this;
+        //        },
+        //        render: function () {
+        //            var num = getNum(this);
+
+        //            if ($('#txtCount').length == 0) {
+        //                this.input.after('<span id="txtCount"></span>');
+        //            };
+
+        //            $('#txtCount').html(num + '个字');
+        //        }
+        //    };
+
+        //    return TextCountFunc;
+        //})();
+
+        //$(function () {
+        //    new TextCount({
+        //        "id": "#txt"
+        //    }).init();
+        //});
+
+        //4、面向对象
+
+
+    </script>
+</body>
+</html>
