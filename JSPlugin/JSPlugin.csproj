@@ -144,6 +144,7 @@
     <Content Include="Plugins\Drag\drag.js" />
     <Content Include="Plugins\Drag\JSDrag.html" />
     <Content Include="Global.asax" />
+    <Content Include="Plugins\Slide\jquery.slide.js" />
     <Content Include="Plugins\Sortable\dbx.min.js.map">
       <DependentUpon>dbx.min.js</DependentUpon>
     </Content>
