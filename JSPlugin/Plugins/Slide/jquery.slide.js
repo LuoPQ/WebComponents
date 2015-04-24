@@ -2,13 +2,15 @@
     "use strict";
 
     var defaults = {
-        "scrollTimeSpan": 500,
-        "scrollTime": 4500,
+        "speed": 1000,
+        "timespan": 3000,
         "direction": "left",
         "type": "gallery",//carousel or gallery,
         "scrollCount": 1,
-        "scrollBack": true,
-        "onScrollToBottom": null
+        "leftSelector": ".slideLeft",
+        "rightSelector": ".slideRight",
+        "indexSelector": ".num",
+        "indexClass": "on"
     }
 
     $.fn.slide = function (options) {
@@ -17,6 +19,8 @@
         var $container = $(this);
         var $slider = $container.find(".slider");
         var $sliderItems = $slider.children();
+        var $indexBox = $(options.indexSelector);
+
 
         var timer = null;//计时器
         var index = 0;//开始滚动的索引
@@ -26,8 +30,6 @@
         var scrollLength = 0;
 
         $container.css({
-            "height": options.containerHeight || $container.height(),
-            "width": options.containerWidth || $container.width(),
             "overflow": "hidden",
             "position": "relative"
         });
@@ -35,10 +37,6 @@
         var sliderCss = {
             "position": "absolute"//保证Slide的position为absolute，必须脱离文档流才能滚动
         }
-
-        //一开始停止可能存在的动画
-        $slider.stop();
-
         switch (options.direction) {
             case "top":
             case "bottom":
@@ -49,10 +47,11 @@
                 //横向滚动的距离等于元素的宽度乘以滚动的元素个数
                 scrollLength = $sliderItems.first().outerHeight(true) * options.scrollCount;
 
+
                 //滑入停止动画，滑出开始动画.
                 $container.hover(function () {
                     stopTimer();
-                }, function () {                                        
+                }, function () {
                     initTimer();
                 }).trigger("mouseleave");
 
@@ -63,6 +62,7 @@
                 break;
             case "left":
             case "right":
+
                 containerLength = $container.width();
                 count = $sliderItems.length / options.scrollCount;
 
@@ -88,47 +88,43 @@
         }
         $slider.css(sliderCss);
 
-        ///初始化计时器
+        //初始化计时器
         function initTimer() {
             timer = setInterval(function () {
                 showImg(index)
                 index++;
-                if (index >= count) {//最后一张图片之后
-                    //如果支持反向滚动，则设置index为0
-                    if (options.scrollBack) {
-                        index = 0;
-                    }
-
-                    //如果有滚到底部的回调函数
-                    if (options.onScrollToBottom) {
-                        index = 0;
-                        options.onScrollToBottom();
-                    }
+                if (index >= count) {//最后一张图片之后，转到第一张
+                    index = 0;
                 }
-            }, options.scrollTimeSpan);
-        }
-
-        function stopTimer() {
-            $slider.stop(true, false);
-            clearInterval(timer);
+            }, options.timespan);
         }
 
         //重启计时器
         function restartTimer(index) {
             clearInterval(timer);
             showImg(index);
-            initTimer();
+            timer = setInterval(function () {
+                showImg(index)
+                index++;
+                if (index > count) {       //最后一张图片之后，转到第一张
+                    index = 0;
+                }
+            }, options.timespan);
+        }
+
+        //停止计时器
+        function stopTimer() {
+            $slider.stop(true, false);
+            clearInterval(timer);
         }
 
         function showImg(index) {
-
             //当滚动的距离与最大滚动距离之差小于容器的尺寸时
             //会出现空白区域，所以需要设置一个最大的滚动距离
             if (scrollLength * (count - index) < containerLength) {
                 var maxScrollLength = containerLength - scrollLength * count;
             }
             var resultValue = maxScrollLength ? maxScrollLength : (-scrollLength * index) + "px";
-
             var animateCss = null;
 
             switch (options.direction) {
@@ -147,11 +143,11 @@
                 default:
 
             }
-            $slider.animate(animateCss, options.scrollTime);//stop(true, false)
+            $(".slider").stop(true, false).animate(animateCss, options.speed);
         }
 
 
-        $(".slideLeft").on("click", function () {
+        $(options.leftSelector).on("click", function () {
             if (index > 0) {
                 --index
             }
@@ -159,9 +155,9 @@
                 index = count;
             }
             restartTimer(index);
-        });
+        })
 
-        $(".slideRight").on("click", function () {
+        $(options.rightSelector).on("click", function () {
             if (index < count) {
                 ++index;
             }
@@ -169,7 +165,17 @@
                 index = 0;
             }
             restartTimer(index);
-        });
+        })
+
+        $indexBox.children().hover(function () {
+            var $this = $(this);
+            index = $this.index();
+            stopTimer();
+            showImg(index);
+            $this.addClass(options.indexClass).siblings().removeClass(options.indexClass);
+        }, function () {
+            restartTimer(index);
+        })
     };
 
 })($);
