@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <style>
+        div, ul, li { padding: 0; margin: 0; }
+        .container { height: 220px; width: 870px; margin-bottom: 10px; }
+            .container .slider li { float: left; }
+            .container .slider .item { padding: 5px; margin: 5px; border: 2px solid #ccc; height: 200px; width: 150px; }
+        /*.container .slider { position: absolute; width: 2500px; }*/
+        .num { position: absolute; right: 5px; bottom: 5px; }
+        .container .num li { float: left; color: #FF7300; text-align: center; line-height: 16px; width: 16px; height: 16px; cursor: pointer; overflow: hidden; margin: 3px 1px; border: 1px solid #FF7300; background-color: #fff; }
+            .container .num li.on { color: #fff; line-height: 21px; width: 21px; height: 21px; font-size: 16px; margin: 0 1px; border: 0; background-color: #FF7300; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <ul class="slider">
+            <li><div class="item">1</div></li>
+            <li><div class="item">2</div></li>
+            <li><div class="item">3</div></li>
+            <li><div class="item">4</div></li>
+            <li><div class="item">5</div></li>
+            <li><div class="item">6</div></li>
+            <li><div class="item">7</div></li>
+            <li><div class="item">8</div></li>
+            <li><div class="item">9</div></li>
+            <li><div class="item">10</div></li>
+            <li><div class="item">11</div></li>
+            <li><div class="item">12</div></li>
+            <li><div class="item">13</div></li>
+            <li><div class="item">14</div></li>
+            <li><div class="item">15</div></li>
+            <li><div class="item">16</div></li>
+            <li><div class="item">17</div></li>
+            <li><div class="item">18</div></li>
+            <li><div class="item">19</div></li>
+            <li><div class="item">20</div></li>
+            <li><div class="item">21</div></li>
+            <li><div class="item">22</div></li>
+        </ul>
+        <ul class="num">
+            <li class="on">1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+        </ul>
+    </div>
+    <input type="button" class="slideLeft" value="向左" id="scrollLeft" />
+    <input type="button" class="slideRight" value="向右" id="scrollRight" />
+    <!--<script src="../../Scripts/jquery-2.1.3.min.js"></script>-->
+    <script src="http://static.yiqifei.com/js/jquery-1.8.2.min.js"></script>
+    <script src="jquery.slide.js"></script>
+    <script>
+        $(".container").slide({
+            scrollCount: 5,
+            direction: "left",
+            timespan: 4000,
+            speed: 3000
+        });
+    </script>
+</body>
+</html>
