@@ -88,6 +88,13 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\images\slide-1.jpg" />
+    <Content Include="Content\images\slide-2.jpg" />
+    <Content Include="Content\images\slide-3.jpg" />
+    <Content Include="Content\images\slide-4.jpg" />
+    <Content Include="Content\images\slide-5.jpg" />
+    <Content Include="Content\images\slide-6.jpg" />
+    <Content Include="Content\images\slide-7.jpg" />
     <Content Include="Content\Site.css" />
     <Content Include="Plugins\Animation\jQanimation.html" />
     <Content Include="Plugins\AutoComplete\jQAutoComplete.html" />
@@ -144,12 +151,10 @@
     <Content Include="Plugins\Drag\drag.js" />
     <Content Include="Plugins\Drag\JSDrag.html" />
     <Content Include="Global.asax" />
-<<<<<<< HEAD
     <Content Include="Plugins\OOP\Start.html" />
-=======
     <Content Include="Plugins\Slide\jQSlide.html" />
+    <Content Include="Plugins\Slide\JQSlides.html" />
     <Content Include="Plugins\Slide\jquery.slide.js" />
->>>>>>> 674df483fd436859bccdb0b65482f8f33ffba0d0
     <Content Include="Plugins\Sortable\dbx.min.js.map">
       <DependentUpon>dbx.min.js</DependentUpon>
     </Content>
@@ -221,7 +226,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\images\" />
     <Folder Include="Models\" />
     <Folder Include="Plugins\Rater\css\" />
     <Folder Include="Plugins\Timeline\" />
