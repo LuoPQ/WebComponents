@@ -4,58 +4,145 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title></title>
     <style>
-        .slide { width: 1140px; height: 270px; position: absolute; }
-            .slide img { position: absolute; width: 570px; height: 270px; z-index: 5; }
+        .slide { width: 2280px; height: 270px; position: absolute; }
+            .slide img { position: absolute; width: 570px; height: 270px; }
     </style>
 </head>
 <body>
-    <div class="container" style="overflow:hidden;position:relative;width:570px;height:270px">
+    <div class="container" style="overflow:hidden;position:relative;height:270px">
         <div class="slide" style="">
-            <img src="/Content/images/slide-1.jpg" alt="Slide 1" style="left:570px">
-            <img src="/Content/images/slide-2.jpg" alt="Slide 2" style="left:1140px">
+            <img src="/Content/images/slide-1.jpg" alt="Slide 1">
+            <img src="/Content/images/slide-2.jpg" alt="Slide 2">
             <img src="/Content/images/slide-3.jpg" alt="Slide 3">
             <img src="/Content/images/slide-4.jpg" alt="Slide 4">
             <img src="/Content/images/slide-5.jpg" alt="Slide 4">
             <img src="/Content/images/slide-6.jpg" alt="Slide 4">
-            <img src="/Content/images/slide-7.jpg" alt="Slide 4">
+            <!--<img src="/Content/images/slide-7.jpg" alt="Slide 4">-->
         </div>
     </div>
-    <a href="javascript:;" id="btnToggle">切换</a>
+    <a href="javascript:;" id="btnLeft">左切换</a>
+    <a href="javascript:;" id="btnRight">右切换</a>
     <!--<script src="http://static.yiqifei.com/js/jquery-1.8.2.min.js"></script>-->
     <script src="../../Scripts/jquery-2.1.3.min.js"></script>
     <script>
-        var currentIndex = 0;
+        //当前显示项的索引
+        var currentItemIndex = 0;
+
+        //滚动屏的索引
+        var scrollIndex = 0;
+
+        //表示一次滚动的数量
+        var scrollCount = 2;
+
+        //滚动的对象，图片的容器
         var $slide = $(".slide");
-        $slide.css("left", "-570px");
+
         var $list = $slide.children();
+
+        var itemWidth = $list.first().width();
+
+        $(".container").css("width", itemWidth * scrollCount);
+
         $list.first().css({
-            zIndex: 5,
-            left: "570px"
+            zIndex: 5//5是用来提高图片层级，将其显示在最上面
         }).next().css({
-            "left": "1140px"
+            zIndex: 5,
+            left: itemWidth
+        }).next().css({
+            left: itemWidth * 2
+        })
+        .next().css({
+            left: itemWidth * 3
         });
 
-        $("#btnToggle").on("click", function () {
-            //$list.eq(currentIndex)
-            if (currentIndex == 6) {
-                currentIndex = 0;
+        $("#btnLeft").on("click", function () {
+            if (scrollIndex == 0) {
+                scrollIndex = ($list.length / scrollCount - 1);
+                currentItemIndex = $list.length;
             }
             else {
-                currentIndex++;
+                scrollIndex--;
+                currentItemIndex = currentItemIndex - scrollCount;
             }
 
-            $slide.animate({ "left": "-1140px" }, "fast", "linear", function () {
-                $slide.css({ "left": "-570px" });
-                $list.eq(currentIndex).css({
+            $slide.animate({ "left": itemWidth * scrollCount }, "slow", "linear", function () {
+                $slide.css({ "left": 0 });
+
+                $list.css({
+                    zIndex: 0,
+                    left: 0
+                }).slice(currentItemIndex, currentItemIndex + scrollCount).css({
                     zIndex: 5,
-                }).siblings().css({
-                    zIndex: 0
                 });
-                $list.eq(currentIndex + 1 > 6 ? 0 : currentIndex + 1).css({
-                    left: "1140px"
-                }).siblings().css({
-                    left: "570px"
+                $list.eq(currentItemIndex + 1).css({
+                    left: -itemWidth
                 });
+
+                var firstIndex = currentItemIndex + scrollCount;
+                var secondIndex = currentItemIndex + scrollCount + 1;
+
+                if (firstIndex >= 6) {
+                    firstIndex = firstIndex - 6;
+                    secondIndex = secondIndex - 6;
+                }
+
+                //设置后续索引的样式
+                $list.eq(secondIndex).css({
+                    left: -itemWidth * scrollCount
+                })
+                $list.eq(firstIndex).css({
+                    left: -itemWidth * (scrollCount + 1)
+                })
+
+                ////设置后续索引的样式
+                //$list.eq(currentItemIndex + 3 >= 5 ? currentItemIndex + 3 - 5 : currentItemIndex + 3).css({
+                //    left: "1140px"
+                //})
+                //$list.eq(currentItemIndex + 4 > 5 ? currentItemIndex + 4 - 5 : currentItemIndex + 4).css({
+                //    left: "1710px"
+                //})
+
+            });
+        })
+
+        $("#btnRight").on("click", function () {
+            if (scrollIndex == ($list.length / scrollCount - 1)) {
+                scrollIndex = 0;
+                currentItemIndex = 0;
+            }
+            else {
+                scrollIndex++;
+                currentItemIndex = currentItemIndex + scrollCount;
+            }
+
+            $slide.animate({ "left": -itemWidth * scrollCount }, "slow", "linear", function () {
+                $slide.css({ "left": 0 });
+
+                $list.css({
+                    zIndex: 0,
+                    left: 0
+                }).slice(currentItemIndex, currentItemIndex + scrollCount).css({
+                    zIndex: 5,
+                });
+                $list.eq(currentItemIndex + 1).css({
+                    left: itemWidth
+                });
+
+                var firstIndex = currentItemIndex + scrollCount;
+                var secondIndex = currentItemIndex + scrollCount + 1;
+
+                if (firstIndex >= 6) {
+                    firstIndex = firstIndex - 6;
+                    secondIndex = secondIndex - 6;
+                }
+
+                //设置后续索引的样式
+                $list.eq(firstIndex).css({
+                    left: itemWidth * scrollCount
+                })
+                $list.eq(secondIndex).css({
+                    left: itemWidth * (scrollCount + 1)
+                })
             });
         })
     </script>
