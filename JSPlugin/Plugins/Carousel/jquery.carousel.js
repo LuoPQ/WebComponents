@@ -49,31 +49,33 @@
             $(hoverEle).addClass("select").siblings().removeClass("select");
         }
 
+        function bindEvent() {
+            $imgList.each(function (i, ele) {
+                $(ele).on({
+                    "mouseover": function () {
+                        clearTimeout(timer);
+                    },
+                    "mouseout": function () {
+                        startTimer();
+                    }
+                })
+            });
+
+            $btnList.each(function (i, ele) {
+                $(ele).on({
+                    "mouseover": function () {
+                        stopTimer(i, ele);
+                    },
+                    "mouseout": function () {
+                        startTimer();
+                    }
+                })
+            });
+        }
+
+        bindEvent();
+
         startTimer();
-
-        $imgList.each(function (i, ele) {
-            $(ele).on({
-                "mouseover": function () {
-                    clearTimeout(timer);
-                },
-                "mouseout": function () {
-                    startTimer();
-                }
-            })
-        });
-
-        $btnList.each(function (i, ele) {
-            $(ele).on({
-                "mouseover": function () {
-                    stopTimer(i, ele);
-                },
-                "mouseout": function () {
-                    startTimer();
-                }
-            })
-        });
-
-
     };
 
 })($);

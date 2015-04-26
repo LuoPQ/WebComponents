@@ -155,6 +155,7 @@
     <Content Include="Plugins\OOP\Start.html" />
     <Content Include="Plugins\Slide\jQSlide.html" />
     <Content Include="Plugins\Slide\JQSlides.html" />
+    <Content Include="Plugins\Slide\jquery.carousel.js" />
     <Content Include="Plugins\Slide\jquery.slide.js" />
     <Content Include="Plugins\Sortable\dbx.min.js.map">
       <DependentUpon>dbx.min.js</DependentUpon>
