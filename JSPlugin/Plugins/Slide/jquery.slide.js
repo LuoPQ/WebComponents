@@ -2,200 +2,160 @@
     "use strict";
 
     var defaults = {
-        "speed": 1000,
-        "timespan": 3000,
-        "direction": "left",
-        //"type": "gallery",//carousel or gallery,
-        "scrollCount": 1,
-        "leftSelector": ".slideLeft",
-        "rightSelector": ".slideRight",
-        "indexSelector": ".num",
-        "indexClass": "on"
+        "switchTime": 4000,
+        "effect": "slide",//slide or fade
+        "speed": 800,
+        "perScrollCount": 1,
+        "indexBoxSelector": ".indexBox",
+        "btnLeftSelector": ".btnLeft",
+        "btnRightSelector": ".btnRight"
     }
 
     $.fn.slide = function (options) {
         options = $.extend(defaults, options || {});
 
-        //#region 声明相关变量
-        var $container = $(this);
-        var $slider = $container.find(".slider");
-        var $sliderItems = $slider.children();
-        var $indexBtns = $(options.indexSelector).children();
+        var TOP_ZINDEX = 5;
+        var DEFAULT_ZINDEX = 0;
 
-        var timer = null;//计时器
-        var index = 0;//开始滚动的索引
-        var count = $sliderItems.length / options.scrollCount;//一次完成滚动所需要的次数
-        var containerLength = 0;//元素容器的大小，上下方向则为高度，左右方向则为宽度
-        var scrollLength = 0;//滚动的长度
+        var directions = {
+            left: "left",
+            right: "right"
+        };
 
-        //#endregion
+        var $slide = $(this);
+        var $list = $slide.children();
 
-        //#region 计时器对象
-        var timeObj = {
+        var width = $list.first().width();
+        var currentIndex = 0;
+        var minIndex = 0;
+        var maxIndex = $list.length - 1;
+
+        var timerObj = {
             timer: null,
-            init: function () {
-                startSlide();
-                timeObj.timer = setInterval(function () {
-                    startSlide()
-                    index++;
-                    if (index >= count) {//最后一张图片之后，转到第一张
-                        index = 0;
-                    }
-                }, options.timespan);
+            start: function () {
+                timerObj.timer = setInterval(function () {
+                    $(options.btnRightSelector).click();
+                }, options.switchTime);
             },
             stop: function () {
-                $slider.stop(true, true);
-                clearInterval(timeObj.timer);
-            },
-            restart: function () {
-                clearInterval(timeObj.timer);
-                timeObj.init();
+                clearInterval(timerObj.timer);
             }
         };
-        //#endregion
 
-        ///初始化滑动
-        function initSlide() {
-
-            initData();
+        function start() {
+            init();
 
             bindEvent();
+
+            timerObj.start();
         }
 
-        //初始化相关数据
-        function initData() {
-            $container.css({
-                "overflow": "hidden",
-                "position": "relative",
-                "height": $slider.height() || $sliderItems.first().height()
+        function init() {
+            //如果一次性滚动多个，修改相关的的数据
+            if (options.perScrollCount > 1) {
+                for (var i = 0, length = $list.length; i < length; i = i + options.perScrollCount) {
+                    $list.slice(i, i + options.perScrollCount).wrapAll("<div />");
+                }
+                $list = $slide.children();
+
+                width = width * options.perScrollCount;
+                maxIndex = $list.length - 1;
+            }
+
+            //在外层增加一个遮挡滚动列表的div
+            $slide.wrap('<div style="overflow:hidden;position:relative;width:' + width + 'px;height:270px" />');
+
+            //设置图片列表为绝对定位，动画效果需要绝对定位
+            $list.css("position", "absolute");
+            $slide.css("width", width * 2);
+
+            //初始化图片的样式
+            $list.first().css({
+                zIndex: TOP_ZINDEX
             });
-
-            var sliderCss = {
-                "position": "absolute"//保证Slide的position为absolute，必须脱离文档流才能滚动
-            }
-
-            switch (options.direction) {
-                case "top":
-                case "bottom":
-                    containerLength = $container.height();
-                    //横向滚动的距离等于元素的宽度乘以滚动的元素个数
-                    scrollLength = $sliderItems.first().outerHeight(true) * options.scrollCount;
-                    sliderCss = $.extend(sliderCss,
-                        {
-                            "height": "100%",
-                            "top": -scrollLength * index + "px" //改变 marginTop 属性的值达到轮播的效果
-                        });
-                    break;
-                case "left":
-                case "right":
-                    containerLength = $container.width();
-                    //横向滚动的距离等于元素的宽度乘以滚动的元素个数
-                    scrollLength = $sliderItems.first().outerWidth(true) * options.scrollCount;
-                    sliderCss = $.extend(sliderCss,
-                       {
-                           "width": $sliderItems.length * $sliderItems.first().outerWidth(true),
-                           "left": -scrollLength * index + "px" //改变 marginTop 属性的值达到轮播的效果
-                       });
-                    break;
-                default:
-            }
-
-            $slider.css(sliderCss);
+            $list.eq(1).css({
+                left: width
+            });
+            $list.last().css({
+                left: -width
+            })
         }
 
-        ///绑定事件
         function bindEvent() {
-
-            //滑入停止动画，滑出开始动画.
-            $container.hover(function () {
-                timeObj.stop();
-            }, function () {
-                timeObj.init();
-            }).trigger("mouseleave");
-
-            $(options.leftSelector).on("click", function () {
-                if (index > 0) {
-                    --index
-                }
-                else {
-                    index = count;
-                }
-                setCurrentBtnClass($indexBtns.eq(index));
-                timeObj.restart();
+            $(options.btnLeftSelector).on("click", function () {
+                doRolling(directions.left);
             })
 
-            $(options.rightSelector).on("click", function () {
-                if (index < count) {
-                    ++index;
-                }
-                else {
-                    index = 0;
-                }
-                setCurrentBtnClass($indexBtns.eq(index));
-                timeObj.restart();
+            $(options.btnRightSelector).on("click", function () {
+                doRolling(directions.right);
             })
 
-            $indexBtns.hover(function () {
-                var $this = $(this);
-                index = $this.index();
-                timeObj.stop();
-                startSlide();
-                setCurrentBtnClass($this);
-            }, function () {
-                timeObj.restart();
-            })
-        }
+            $(options.indexBoxSelector).children()
+                .hover(function () {
+                    var index = $(this).index();
+                    if (index != currentIndex) {
+                        var left = index - currentIndex < 0 ? width : -width;
 
-        //设置当前按钮按时
-        function setCurrentBtnClass($indexBtn) {
-            $indexBtn.addClass(options.indexClass).siblings().removeClass(options.indexClass);
-        }
+                        scrollAnim(left);
 
-        //开始移动
-        function startSlide() {
-            //当滚动的距离与最大滚动距离之差小于容器的尺寸时
-            //会出现空白区域，所以需要设置一个最大的滚动距离
-            if (scrollLength * (count - index) < containerLength) {
-                var maxScrollLength = containerLength - scrollLength * count;
-            }
-            var resultValue = maxScrollLength ? maxScrollLength : (-scrollLength * index) + "px";
-            var animateCss = null;
-
-            switch (options.direction) {
-                case "top":
-                case "bottom":
-                    animateCss = {
-                        "top": resultValue
+                        currentIndex = index;
                     }
+                    timerObj.stop();
+                }, function () {
+                    timerObj.start();
+                });
+        }
+
+        //进行滚动
+        function doRolling(direction) {
+            chageCurrentIndex(direction);
+
+            var left = direction == directions.left ? width : -width;
+
+            scrollAnim(left);
+        }
+
+        //改变当前滚动的索引
+        function chageCurrentIndex(direction) {
+            switch (direction) {
+                case directions.left:
+                    currentIndex = currentIndex == minIndex ? maxIndex : currentIndex - 1;
                     break;
-                case "left":
-                case "right":
-                    animateCss = {
-                        "left": resultValue
-                    }
+                case directions.right:
+                    currentIndex = currentIndex == maxIndex ? minIndex : currentIndex + 1;
                     break;
                 default:
-
-            }
-            $slider.stop(true, true).animate(animateCss, options.speed);
-
-            setCurrentBtnClass($indexBtns.eq(index));
-        }
-
-
-
-        initSlide();
-
-        return {
-            start: function () {
-                timeObj.restart();
-                return this;
-            },
-            stop: function () {
-                timeObj.stop();
-                return this;
             }
         }
-    };
 
+        //滚动的动画效果
+        function scrollAnim(left) {
+            $slide.stop(true, true).animate({ "left": left }, options.scrollSpeed, "linear", function () {
+                $slide.css({ "left": "0px" });
+
+                $list.css({
+                    left: "0px",
+                    zIndex: DEFAULT_ZINDEX
+                })
+                $list.eq(currentIndex).css({
+                    zIndex: TOP_ZINDEX,
+                });
+
+                //设置前后索引的样式保证动画效果
+                //设置当前索引的前一项的left
+                $list.eq(currentIndex - 1 < minIndex ? maxIndex : currentIndex - 1).css({
+                    left: -width
+                });
+
+                //设置当前索引的后一项的left
+                $list.eq(currentIndex + 1 > maxIndex ? minIndex : currentIndex + 1).css({
+                    left: width
+                });
+            });
+        }
+
+        //if (options.effect == "slide") {
+        start();
+        //}
+    }
 })($);
