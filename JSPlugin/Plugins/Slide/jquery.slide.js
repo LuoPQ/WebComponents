@@ -2,13 +2,14 @@
     "use strict";
 
     var defaults = {
-        "switchTime": 4000,
+        "switchTime": 5000,
         "effect": "slide",//slide or fade
         "speed": 800,
         "perScrollCount": 1,
         "indexBoxSelector": ".indexBox",
         "btnLeftSelector": ".btnLeft",
-        "btnRightSelector": ".btnRight"
+        "btnRightSelector": ".btnRight",
+        "indexClass": null
     }
 
     $.fn.slide = function (options) {
@@ -22,10 +23,11 @@
             right: "right"
         };
 
-        var $slide = $(this);
-        var $list = $slide.children();
+        var $slider = $(this);
+        var $list = $slider.children();
 
-        var width = $list.first().width();
+        var width = $list.first().outerWidth(true);
+        var height = $list.first().outerHeight(true);
         var currentIndex = 0;
         var minIndex = 0;
         var maxIndex = $list.length - 1;
@@ -56,18 +58,23 @@
                 for (var i = 0, length = $list.length; i < length; i = i + options.perScrollCount) {
                     $list.slice(i, i + options.perScrollCount).wrapAll("<div />");
                 }
-                $list = $slide.children();
+                $list = $slider.children();
 
                 width = width * options.perScrollCount;
                 maxIndex = $list.length - 1;
             }
 
             //在外层增加一个遮挡滚动列表的div
-            $slide.wrap('<div style="overflow:hidden;position:relative;width:' + width + 'px;height:270px" />');
+            $slider.wrap('<div style="overflow:hidden;position:relative;width:' + width + 'px;height:' + height + 'px" />');
+
+            //设置图片绝对定位，使其重叠
+            $list.css("position", "absolute");
 
             //设置图片列表为绝对定位，动画效果需要绝对定位
-            $list.css("position", "absolute");
-            $slide.css("width", width * 2);
+            $slider.css({
+                "width": width * 2,
+                "position": "absolute"
+            });
 
             //初始化图片的样式
             $list.first().css({
@@ -82,6 +89,12 @@
         }
 
         function bindEvent() {
+            $slider.hover(function () {
+                timerObj.stop();
+            }, function () {
+                timerObj.start();
+            });
+
             $(options.btnLeftSelector).on("click", function () {
                 doRolling(directions.left);
             })
@@ -99,6 +112,8 @@
                         scrollAnim(left);
 
                         currentIndex = index;
+
+                        setCurrentIndexClass();
                     }
                     timerObj.stop();
                 }, function () {
@@ -109,7 +124,7 @@
         //进行滚动
         function doRolling(direction) {
             chageCurrentIndex(direction);
-
+            setCurrentIndexClass();
             var left = direction == directions.left ? width : -width;
 
             scrollAnim(left);
@@ -130,8 +145,8 @@
 
         //滚动的动画效果
         function scrollAnim(left) {
-            $slide.stop(true, true).animate({ "left": left }, options.scrollSpeed, "linear", function () {
-                $slide.css({ "left": "0px" });
+            $slider.stop(true, true).animate({ "left": left }, options.scrollSpeed, "linear", function () {
+                $slider.css({ "left": "0px" });
 
                 $list.css({
                     left: "0px",
@@ -154,8 +169,26 @@
             });
         }
 
+        //设置当前按钮按时
+        function setCurrentIndexClass() {
+            $(options.indexBoxSelector)
+                .children().eq(currentIndex).addClass(options.indexClass)
+                .siblings().removeClass(options.indexClass);
+        }
+
         //if (options.effect == "slide") {
         start();
         //}
+
+        return {
+            start: function () {
+                timerObj.start();
+                return this;
+            },
+            stop: function () {
+                timerObj.stop();
+                return this;
+            }
+        }
     }
 })($);
