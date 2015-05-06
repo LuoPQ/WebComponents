@@ -4,7 +4,8 @@
     var defaults = {
         "speed": 500,
         "isTopNav": true,
-        "activeClass": "active"
+        "activeClass": "active",
+        "linkEle": "a"
     }
 
     if (typeof Array.prototype.indexOf != "function") {
@@ -31,7 +32,8 @@
 
         var $menu = $(this);
         var $body = $('body');
-        var $links = $menu.find("a:not(.exceptLink)");
+
+        var $links = $menu.find(options.linkEle + ":not(.exceptLink)");
 
         var offsetTop = $menu.offset().top;
 
@@ -55,6 +57,8 @@
         //切换隐藏的区域
         var toggleHashes = [];
 
+        $menu.find(".childMenu").hide();
+
         function stickyMenu() {
 
             var scrollTop = $(window).scrollTop();
@@ -74,29 +78,38 @@
                     "top": originTop
                 })
                 //$body.css('padding-top', 0);
-
             }
 
-            for (var i = 0; i < $links.length; i++) {
+
+
+            for (var i = 0; i < sectionRange.length; i++) {
                 if ((sectionRange[i].top > scrollTop + 1 && (scrollTop + windowHeight) > sectionRange[i].bottom) ||
                     (sectionRange[i].top < scrollTop + 1 && (scrollTop + windowHeight) < sectionRange[i].bottom)) {
-                    $links.removeClass(options.activeClass);
-                    $links.eq(i).addClass(options.activeClass);
+                    setCurrentLink($links.eq(i));
                     break;
                 }
             }
 
             //第一个链接
             if (scrollTop == 0) {
-                $links.removeClass(options.activeClass);
-                $links.first().addClass(options.activeClass);
+                setCurrentLink($links.first());
             }
 
             //最后一个链接
             if (scrollTop >= $(document).height() - windowHeight) {
-                $links.removeClass(options.activeClass);
-                $links.last().addClass(options.activeClass);
+                setCurrentLink($links.last());
             }
+        }
+
+        function setCurrentLink($currentLink) {
+            $links.removeClass(options.activeClass);
+
+            $currentLink.addClass(options.activeClass)
+            $currentLink.find(".childMenu").slideDown();
+            $currentLink.parent().slideDown();
+
+            $currentLink.siblings().find(".childMenu").hide();
+            $currentLink.parentsUntil($menu, ":not(.childMenu)").siblings().find(".childMenu").hide();
         }
 
         $links.each(function (i, ele) {
@@ -113,19 +126,25 @@
 
             var targetOffset = $target.offset();
 
-            sectionRange.push({
-                top: options.isTopNav ? targetOffset.top - menuHeight : targetOffset.top,
-                bottom: targetOffset.top + $target.outerHeight()
-            })
+            if (targetOffset) {
+                sectionRange.push({
+                    top: options.isTopNav ? targetOffset.top - menuHeight : targetOffset.top,
+                    bottom: targetOffset.top + $target.outerHeight()
+                })
+            }
 
             $ele.on("click", function () {
                 var $toggleTarget = $("." + toggleHashes[i]);
                 if ($toggleTarget.isHidden()) {
                     $toggleTarget.slideDown();
                 }
-                $("html,body").stop().animate({
-                    "scrollTop": sectionRange[i].top
-                })
+
+                if (sectionRange[i]) {
+                    $("html,body").stop().animate({
+                        "scrollTop": sectionRange[i].top
+                    })
+                }
+
                 return false;
             })
 
@@ -151,6 +170,7 @@
 
             var toggleHash = "toggle-" + $(this).attr("toggletarget").substr(1);
             var $target = $("." + toggleHash);
+            var $this = $(this);
             var index = toggleHashes.indexOf(toggleHash);
 
             if (index >= 0) {
@@ -168,7 +188,11 @@
                         sectionRange[i].bottom -= height;
                     }
                 }
-                $target.slideToggle();
+                $target.slideToggle({
+                    complete: function () {
+                        options.toggleDone && options.toggleDone($this, $target);
+                    }
+                });
             }
 
             return false;
