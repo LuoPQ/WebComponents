@@ -157,6 +157,8 @@
     <Content Include="Plugins\Slide\JQSlides.html" />
     <Content Include="Plugins\Slide\jquery.slide.js" />
     <Content Include="Plugins\Slide\jquery.slideOLD.js" />
+    <Content Include="Plugins\smartFloat\demo.html" />
+    <Content Include="Plugins\smartFloat\jquery.smartFloat.js" />
     <Content Include="Plugins\Sortable\dbx.min.js.map">
       <DependentUpon>dbx.min.js</DependentUpon>
     </Content>
