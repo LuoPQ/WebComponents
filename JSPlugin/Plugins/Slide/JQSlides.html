@@ -11,12 +11,20 @@
 </head>
 <body>
     <div class="slide" style="">
-        <img src="/Content/images/slide-1.jpg" alt="Slide 1">
-        <img src="/Content/images/slide-2.jpg" alt="Slide 2">
-        <img src="/Content/images/slide-3.jpg" alt="Slide 3">
-        <img src="/Content/images/slide-4.jpg" alt="Slide 4">
-        <img src="/Content/images/slide-5.jpg" alt="Slide 4">
-        <img src="/Content/images/slide-6.jpg" alt="Slide 4">
+        <div>
+            <img src="/Content/images/slide-1.jpg" alt="Slide 1">
+        </div>
+        <div><img src="/Content/images/slide-2.jpg" alt="Slide 2"></div>
+        <div>
+            <img src="/Content/images/slide-3.jpg" alt="Slide 3">
+        </div>
+        <div><img src="/Content/images/slide-4.jpg" alt="Slide 4"></div>
+        <div>
+            <img src="/Content/images/slide-5.jpg" alt="Slide 4">
+        </div>
+        <div>
+            <img src="/Content/images/slide-6.jpg" alt="Slide 4">
+        </div>
         <!--<img src="/Content/images/slide-7.jpg" alt="Slide 4">-->
     </div>
     <ul class="indexBox">
@@ -32,10 +40,12 @@
     <script src="http://static.yiqifei.com/js/jquery-1.8.2.min.js"></script>
     <!--<script src="../../Scripts/jquery-2.1.3.min.js"></script>-->
     <script src="jquery.slide.js"></script>
-    <script>        
+    <script>
         $(".slide").slide({
             "btnLeftSelector": "#btnLeft",
-            "btnRightSelector": "#btnRight"
+            "btnRightSelector": "#btnRight",
+            "perScrollCount": 2,
+            "autoSwitch": false
         });
     </script>
 </body>

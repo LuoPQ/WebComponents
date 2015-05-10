@@ -5,6 +5,7 @@
         "switchTime": 5000,
         "effect": "slide",//slide or fade
         "speed": 800,
+        "autoSwitch": true,
         "perScrollCount": 1,
         "indexBoxSelector": ".indexBox",
         "btnLeftSelector": ".btnLeft",
@@ -49,7 +50,9 @@
 
             bindEvent();
 
+            //if (options.autoSwitch) {
             timerObj.start();
+            //}
         }
 
         function init() {
