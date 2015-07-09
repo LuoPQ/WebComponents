@@ -96,10 +96,12 @@
             });
 
             $(options.btnLeftSelector).on("click", function () {
+                timerObj.stop();
                 doRolling(directions.left);
             })
 
             $(options.btnRightSelector).on("click", function () {
+                timerObj.stop();
                 doRolling(directions.right);
             })
 
@@ -167,6 +169,7 @@
                     left: width
                 });
             });
+            timerObj.start();
         }
 
         //设置当前按钮按时
