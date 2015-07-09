@@ -130,6 +130,7 @@
             var left = direction == directions.left ? width : -width;
 
             scrollAnim(left);
+            timerObj.start();
         }
 
         //改变当前滚动的索引
@@ -169,7 +170,6 @@
                     left: width
                 });
             });
-            timerObj.start();
         }
 
         //设置当前按钮按时
