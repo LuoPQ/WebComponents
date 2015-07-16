@@ -99,10 +99,12 @@
             });
 
             $(options.btnLeftSelector).on("click", function () {
+                timerObj.stop();
                 doRolling(directions.left);
             })
 
             $(options.btnRightSelector).on("click", function () {
+                timerObj.stop();
                 doRolling(directions.right);
             })
 
@@ -131,6 +133,7 @@
             var left = direction == directions.left ? width : -width;
 
             scrollAnim(left);
+            timerObj.start();
         }
 
         //改变当前滚动的索引
