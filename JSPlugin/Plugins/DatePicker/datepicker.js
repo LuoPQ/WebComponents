@@ -129,16 +129,15 @@ DatePicker.prototype = {
 
         if (this.ele.value) {
 
+            var selectedEles = this.container.querySelectorAll("dd .select");
 
-
-            var selectedEles = document.querySelectorAll("#" + this.ele.id + " dd .select");
             for (var i = 0, length = selectedEles.length; i < length; i++) {
                 selectedEles[i].className = selectedEles[i].className.replace("select", "");
             }
 
             var selectedDate = new Date().parse(this.ele.value);
 
-            var dateBtn = document.querySelectorAll("#" + this.ele.id + " dd a");
+            var dateBtn = this.container.querySelectorAll("dd a");
             var year = selectedDate.getFullYear();
             var month = selectedDate.getMonth();
 
@@ -312,9 +311,8 @@ DatePicker.prototype = {
     bindEvent: function () {
         var that = this;
 
-        //document.querySelector("#" + that.ele.id+"")
-
-        that.$container.find(".date-action").on("click", function () {
+        var dateActionBtn = that.container.querySelector(".date-action");
+        dateActionBtn.onclick = function () {
             switch (that.pickerType) {
                 case pickerTypes.year:
                     break;
@@ -328,33 +326,81 @@ DatePicker.prototype = {
                     that.refresh();
                     break;
             }
-        });
+        }
 
-        that.$container.find("dd>a").on("click", function () {
-            var $this = $(this);
-            if (!$this.hasClass("disabled")) {
+        //that.$container.find(".date-action").on("click", function () {
+        //    switch (that.pickerType) {
+        //        case pickerTypes.year:
+        //            break;
+        //        case pickerTypes.month:
+        //            that.pickerType = pickerTypes.year;
+        //            that.refresh();
+        //            break;
+        //        case pickerTypes.day:
+        //        default:
+        //            that.pickerType = pickerTypes.month;
+        //            that.refresh();
+        //            break;
+        //    }
+        //});
+
+
+        that.container.querySelectorAll("dd>a").onclick = function () {
+
+            if (!this.className.contains("disabled")) {
                 switch (that.pickerType) {
                     case pickerTypes.year:
-                        that.currentYear = parseInt($this.attr("year"));
+                        that.currentYear = parseInt(this.getAttribte("year"));
                         that.pickerType = pickerTypes.month;
                         that.refresh();
                         break;
                     case pickerTypes.month:
-                        that.currentMonth = parseInt($this.attr("month"));
+                        that.currentMonth = parseInt(this.getAttribte("month"));
                         that.pickerType = pickerTypes.day;
                         that.refresh();
                         break;
                     case pickerTypes.day:
                     default:
-                        var date = $this.attr("date");
+                        var date = this.getAttribte("date");
                         that.selectDate(date);
+                        var dateBtns = that.container.querySelectorAll("dd a");
+                        for (var i = 0, length = dateBtns.length; i < length; i++) {
+                            if (dateBtns[i].className.contains("select")) {
+
+                            }
+                        }
                         that.$container.find("dd .select").removeClass("select");
                         that.$container.find("dd>[date=" + date + "]").addClass("select");
                         break;
                 }
             }
+        }
 
-        });
+        //that.$container.find("dd>a").on("click", function () {
+        //    var $this = $(this);
+        //    if (!$this.hasClass("disabled")) {
+        //        switch (that.pickerType) {
+        //            case pickerTypes.year:
+        //                that.currentYear = parseInt($this.attr("year"));
+        //                that.pickerType = pickerTypes.month;
+        //                that.refresh();
+        //                break;
+        //            case pickerTypes.month:
+        //                that.currentMonth = parseInt($this.attr("month"));
+        //                that.pickerType = pickerTypes.day;
+        //                that.refresh();
+        //                break;
+        //            case pickerTypes.day:
+        //            default:
+        //                var date = $this.attr("date");
+        //                that.selectDate(date);
+        //                that.$container.find("dd .select").removeClass("select");
+        //                that.$container.find("dd>[date=" + date + "]").addClass("select");
+        //                break;
+        //        }
+        //    }
+        //});
+
         that.$container.find("dt .prev").on("click", function (event) {
             that.prev();
             that.stopBubble(event);
