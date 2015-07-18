@@ -141,8 +141,10 @@
     <Content Include="Plugins\Carousel\jquery.carousel.js" />
     <Content Include="Plugins\Carousel\jquery.slide.js" />
     <Content Include="Plugins\DatePicker\dataPicker.html" />
+    <Content Include="Plugins\DatePicker\datepicker.js" />
     <Content Include="Plugins\DatePicker\jQDatePicker.html" />
     <Content Include="Plugins\DatePicker\jquery.datepicker.js" />
+    <Content Include="Plugins\DatePicker\JSDatePicker.html" />
     <Content Include="Plugins\DatePicker\ko.datepicker.js" />
     <Content Include="Plugins\DatePicker\KOBinding.html" />
     <Content Include="Plugins\DatePicker\KODatePicker.html" />

@@ -147,18 +147,21 @@
                 case pickerTypes.year:
                     var yearTitleHtml = this.createTitleHtml(this.currentYear, this.currentMonth, pickerTypes.year);
                     var yearListHtml = this.createYearListHtml(this.currentYear);
-                    this.$container.html("").append(yearTitleHtml).append(yearListHtml);
+                    //this.$container.html("").append(yearTitleHtml).append(yearListHtml);
+                    this.$container.html(yearTitleHtml + yearListHtml);
                     break;
                 case pickerTypes.month:
                     var monthTitleHtml = this.createTitleHtml(this.currentYear, this.currentMonth, pickerTypes.month);
                     var monthListHtml = this.createMonthListHtml(this.currentYear);
-                    this.$container.html("").append(monthTitleHtml).append(monthListHtml);
+                    this.$container.html(monthTitleHtml + monthListHtml);
+                    //this.$container.html("").append(monthTitleHtml).append(monthListHtml);
                     break;
                 case pickerTypes.day:
                 default:
                     var dayTitleHtml = this.createTitleHtml(this.currentYear, this.currentMonth, pickerTypes.day);
                     var dayListHtml = this.createDateListHtml(this.currentYear, this.currentMonth);
-                    this.$container.html("").append(dayTitleHtml).append(dayListHtml);
+                    this.$container.html(dayTitleHtml + dayListHtml);
+                    //this.$container.html("").append(dayTitleHtml).append(dayListHtml);
                     break;
             }
 
