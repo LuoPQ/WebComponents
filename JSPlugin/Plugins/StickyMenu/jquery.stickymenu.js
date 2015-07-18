@@ -5,7 +5,9 @@
         "speed": 500,
         "isTopNav": true,
         "activeClass": "active",
-        "linkEle": "a"
+        "linkEle": "a",
+        "childMenuRelation": "child",//child or sibling,
+        "onLinkSelected": null
     }
 
     if (typeof Array.prototype.indexOf != "function") {
@@ -30,8 +32,9 @@
     $.fn.stickymenu = function (options) {
         options = $.extend(defaults, options || {});
 
+        var $window = $(window);
         var $menu = $(this);
-        var $body = $('body');
+        //var $body = $('body');
 
         var $links = $menu.find(options.linkEle + ":not(.exceptLink)");
 
@@ -86,6 +89,7 @@
                 if ((sectionRange[i].top > scrollTop + 1 && (scrollTop + windowHeight) > sectionRange[i].bottom) ||
                     (sectionRange[i].top < scrollTop + 1 && (scrollTop + windowHeight) < sectionRange[i].bottom)) {
                     setCurrentLink($links.eq(i));
+                    options.onLinkSelected && options.onLinkSelected($links.eq(i));
                     break;
                 }
             }
@@ -104,67 +108,101 @@
         function setCurrentLink($currentLink) {
             $links.removeClass(options.activeClass);
 
-            $currentLink.addClass(options.activeClass)
-            $currentLink.find(".childMenu").slideDown();
-            $currentLink.parent().slideDown();
+            $currentLink.addClass(options.activeClass);
 
-            $currentLink.siblings().find(".childMenu").hide();
-            $currentLink.parentsUntil($menu, ":not(.childMenu)").siblings().find(".childMenu").hide();
+            if (options.childMenuRelation == "child") {
+                $currentLink.find(".childMenu").slideDown();
+                $currentLink.parents(".childMenu").slideDown();
+
+                $currentLink.siblings().find(".childMenu").hide();
+                $currentLink.parentsUntil($menu, ":not(.childMenu)").siblings().find(".childMenu").hide();
+            }
+            else {
+                //$currentLink.siblings(".childMenu").slideDown();
+
+                ////$currentLink.parents(".childMenu").slideDown();
+
+                //$currentLink.parent().siblings().find(".childMenu").hide();
+                //$currentLink.parentsUntil($menu, ":not(.childMenu)").siblings().find(".childMenu").hide();
+            }
+
         }
 
-        $links.each(function (i, ele) {
+        function bindLink() {
+            sectionRange = [];
+            $links.each(function (i, ele) {
 
-            if ($(this).attr("href").indexOf("#") < 0) {
-                return;
-            }
-            var hash = $(this).attr("href").substr(1);
-            hashes.push(hash);
-            toggleHashes.push("toggle-" + hash);
-
-            var $target = $("." + hash);
-            var $ele = $(ele);
-
-            var targetOffset = $target.offset();
-
-            if (targetOffset) {
-                sectionRange.push({
-                    top: options.isTopNav ? targetOffset.top - menuHeight : targetOffset.top,
-                    bottom: targetOffset.top + $target.outerHeight()
-                })
-            }
-
-            $ele.on("click", function () {
-                var $toggleTarget = $("." + toggleHashes[i]);
-                if ($toggleTarget.isHidden()) {
-                    $toggleTarget.slideDown();
+                if ($(this).attr("href").indexOf("#") < 0) {
+                    return;
                 }
+                var hash = $(this).attr("href").substr(1);
+                hashes.push(hash);
+                toggleHashes.push("toggle-" + hash);
 
-                if (sectionRange[i]) {
-                    $("html,body").stop().animate({
-                        "scrollTop": sectionRange[i].top
+                var $target = $("." + hash);
+                var $ele = $(ele);
+
+                var targetOffset = $target.offset();
+                if (targetOffset) {
+                    sectionRange.push({
+                        hash: hash,
+                        top: options.isTopNav ? targetOffset.top - menuHeight : targetOffset.top,
+                        bottom: targetOffset.top + $target.outerHeight()
                     })
                 }
 
-                return false;
-            })
 
-            //if ($(window).scrollTop() > 0) {
-            //    stickyMenu(i, $ele);
-            //}
+                $ele.off("click")
+                    .on("click", function () {
+                        options.onLinkSelected && options.onLinkSelected($ele);
+                        var $toggleTarget = $("." + toggleHashes[i]);
+                        if ($toggleTarget.isHidden()) {
+                            $toggleTarget.slideDown();
+                        }
 
-            //$(window).on("scroll", function () {
-            //    stickyMenu(i, $ele)
-            //})
-        });
+                        var currentHash = $ele.attr("href").substr(1);
 
-        if ($(window).scrollTop() > 0) {
+                        $.each(sectionRange, function (idx, val) {
+                            if (val.hash == currentHash) {
+                                $("html,body").stop().animate({
+                                    "scrollTop": val.top
+                                })
+                                return false;
+                            }
+                        })
+
+                        //if (sectionRange[i]) {
+                        //    $("html,body").stop().animate({
+                        //        "scrollTop": sectionRange[i].top
+                        //    })
+                        //}
+
+                        return false;
+                    })
+
+                //if ($(window).scrollTop() > 0) {
+                //    stickyMenu(i, $ele);
+                //}
+
+                //$(window).on("scroll", function () {
+                //    stickyMenu(i, $ele)
+                //})
+            });
+        }
+
+
+
+        if ($window.scrollTop() > 0) {
             stickyMenu();
         }
 
-        $(window).on("scroll", function () {
-            stickyMenu();
+        $window.on({
+            "scroll": function () {
+                stickyMenu();
+            }
         })
 
+        bindLink();
 
         $(".toggle").on("click", function () {
 
@@ -197,6 +235,17 @@
 
             return false;
         });
+
+
+        return {
+            refresh: function () {
+                $links = $menu.find(options.linkEle + ":not(.exceptLink)");
+                bindLink();
+            },
+            getCurrentLink: function () {
+                return $links.first(options.activeClass);
+            }
+        }
 
     }
 

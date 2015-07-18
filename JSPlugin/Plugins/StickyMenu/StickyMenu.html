@@ -13,7 +13,7 @@
         a { color: #3e3e3e; }
         .clear { clear: both; }
         .wrap { width: 100%; max-width: 1600px; min-width: 960px; z-index: 10; position: relative; margin: 0 auto; padding: 0; }
-        .section { width: 100%; max-width: 1600px; min-width: 960px; z-index: 10; position: relative; margin: 0 auto; padding: 0 0 20px 0; }
+        .section { width: 100%; max-width: 1600px; min-width: 960px; z-index: 10; position: relative; margin: 0 auto; padding: 0 0 20px 0; height: 800px; }
         .inner { width: 960px; height: 500px; margin: 0 auto; position: relative; min-height: 50px; padding: 30px 0; font-size: 18px; font-family: 'Open Sans', sans-serif; font-weight: 300; }
             .inner:after { content: ""; display: table; clear: both; }
         .subMenu { height: 50px; z-index: 1000; width: 100%; background: #0977bc; position: static; }
@@ -34,7 +34,7 @@
     </style>
 </head>
 <body>
-    <div class="wrap ">
+    <div class="wrap " id="container">
         <div class="section sTop">
             <div class="inner" style="height:200px">
                 <h1 class="title">SMINT Demo Page</h1>
@@ -43,15 +43,16 @@
         </div>
 
         <div class="subMenu">
-            <div class="inner">
+            <div class="inner" id="linkBox">
                 <a href="#sTop" class="subNavBtn">Home</a>
                 <a href="#s1" class="subNavBtn">Section 1</a>
                 <a href="#s2" class="subNavBtn">Section 2</a>
                 <a href="#s3" class="subNavBtn">Section 3</a>
                 <a href="#s4" class="subNavBtn">Section 4</a>
                 <a href="#s5" class="subNavBtn">Section 5</a>
-                <a href="javascript:;" class="subNavBtn exceptLink end toggle" toggleTarget="#s1">External Link</a>
+                <!--<a href="javascript:;" class="subNavBtn exceptLink end toggle" toggletarget="#s1">External Link</a>-->
                 <!--<a href="javascript:;" id="btnHide">隐藏第一个</a>-->
+                <a id="btnAddLink" href="javascript:;">创建新链接</a>
             </div>
         </div>
 
@@ -97,136 +98,26 @@
         //$('.subMenu').smint({
         //    'scrollSpeed': 1000
         //});
-        $(".subMenu").stickymenu();
-        //var sectionRange = [];
+        var menu = $(".subMenu").stickymenu();
 
-        //$("#btnHide").on("click", function () {
+        var $container = $("#container");
+        var $linkBox = $("#linkBox");
 
-        //    console.table(tops);
+        $("#btnAddLink").on("click", function () {
+            // <a href="#s1" class="subNavBtn">Section 1</a>
+            var count = $linkBox.children().length;
+            var html = "<a href='#s" + count + "'class='subNavBtn'>Section " + count + "</a>";
+            $(html).insertBefore($(this));
 
-        //    if ($(".s1").is(":hidden")) {
-        //        console.log("hidden");
-        //        for (var i = 0; i < sectionRange.length; i++) {
-        //            if (i > 1) {
-        //                tops[i] += $(".s1").height();
-        //                sectionRange[i].top += $(".s1").height();
-        //                sectionRange[i].bottom += $(".s1").height();
-        //            }
-        //        }
-        //    }
-        //    else {
-        //        console.log("show");
-        //        for (var i = 0; i < sectionRange.length; i++) {
-        //            if (i > 1) {
-        //                tops[i] -= $(".s1").height();
-        //                sectionRange[i].top -= $(".s1").height();
-        //                sectionRange[i].bottom -= $(".s1").height();
-        //            }
-        //        }
-        //    }
-        //    console.table(tops);
-        //    $(".s1").slideToggle();
-        //});
+            html = '<div class="section s' + count + '">';
+            html += '<p><a href="javascript:;" class="toggle" toggletarget="#s' + count + '">收起</a></p>';
+            html += '<div class="inner toggle-s' + count + '">';
+            html += '<h1>Section ' + count + '</h1>';
+            html += '</div>';
 
-        //var $menu = $(".subMenu");
-        //var offsetTop = $menu.offset().top;
-
-        //var originPos = $menu.css("position");
-        //var left = $menu.css("left");
-        //var top = $menu.css("top");
-
-        //var tops = [];
-
-        //$menu.find("a").each(function (i, ele) {
-        //    if ($(this).attr("href").indexOf("#") < 0) {
-        //        return;
-        //    }
-        //    var hash = $(this).attr("href").substr(1);
-        //    tops.push($("." + hash).offset().top - 50);
-        //    sectionRange.push({
-        //        top: $("." + hash).offset().top - 50,
-        //        bottom: $("." + hash).offset().top + $("." + hash).outerHeight()
-        //    })
-        //    $(ele).on("click", function () {
-        //        var hash = $(this).attr("href").substr(1);
-        //        $("." + hash).slideDown();
-        //        $("html,body").stop().animate({
-        //            "scrollTop": tops[i]
-        //        })
-        //        return false;
-        //    })
-
-        //    if ($(window).scrollTop() > 0) {
-        //        if ($(window).scrollTop() > offsetTop) {
-        //            $menu.css({
-        //                "position": "fixed",
-        //                "top": 0
-        //            });
-        //            $('body').css('padding-top', $menu.height());
-        //        }
-        //        else {
-        //            $menu.css({
-        //                "position": originPos,
-        //                "left": left,
-        //                "top": top
-        //            })
-        //            $('body').css('padding-top', 0);
-
-        //        }
-        //        var scrollTop = $(window).scrollTop();
-        //        if ((sectionRange[i].top > scrollTop + 1 && (scrollTop + $(window).height()) > sectionRange[i].bottom) ||
-        //            (sectionRange[i].top < scrollTop + 1 && (scrollTop + $(window).height()) < sectionRange[i].bottom)) {
-        //            $menu.find("a").removeClass("active");
-        //            $(ele).addClass("active");
-        //        }
-
-        //        //最后一个链接
-        //        if (scrollTop >= $(document).height() - $(window).height()) {
-        //            $menu.find("a").removeClass("active");
-        //            $menu.find("a").last().addClass("active");
-        //        }
-        //    }
-
-        //    $(window).on("scroll", function () {
-
-        //        var $this = $(this);
-        //        if ($this.scrollTop() > offsetTop) {
-        //            $menu.css({
-        //                "position": "fixed",
-        //                "top": 0
-        //            })
-        //            $('body').css('padding-top', $menu.height());
-        //        }
-        //        else {
-        //            $menu.css({
-        //                "position": originPos,
-        //                "left": left,
-        //                "top": top
-        //            })
-        //            $('body').css('padding-top', 0);
-        //        }
-
-        //        var scrollTop = $(window).scrollTop();
-
-        //        if ((sectionRange[i].top > scrollTop + 1 && (scrollTop + $(window).height()) > sectionRange[i].bottom) ||
-        //            (sectionRange[i].top < scrollTop + 1 && (scrollTop + $(window).height()) < sectionRange[i].bottom)) {
-        //            $menu.find("a").removeClass("active");
-        //            $(ele).addClass("active");
-        //        }
-
-        //        if (scrollTop == 0) {
-        //            $menu.find("a").removeClass("active");
-        //            $menu.find("a").first().addClass("active");
-        //        }
-
-        //        if (scrollTop >= $(document).height() - $(window).height()) {
-        //            $menu.find("a").removeClass("active");
-        //            $menu.find("a").last().addClass("active");
-        //        }
-        //    })
-        //})
-
-
+            $container.append(html);
+            menu.refresh();
+        })
     </script>
 </body>
 </html>
