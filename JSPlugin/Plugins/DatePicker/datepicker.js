@@ -66,11 +66,14 @@ var arrayHelper = {
     }
 };
 
-function DatePicker(ele, options) {
-    if (this == window) {
-        return new DatePicker();
+var domHelper = {
+    replaceHtml: function (node, html) {
+
     }
-    else {
+};
+
+function DatePicker(ele, options) {
+    if (this instanceof DatePicker) {
         this.ele = ele;
         this.options = options;
         this.container = null;
@@ -80,6 +83,10 @@ function DatePicker(ele, options) {
         this.pickerType = pickerTypes.day;
 
         this.init();
+ 
+    }
+    else {
+        return new DatePicker();
     }
 }
 DatePicker.prototype = {
