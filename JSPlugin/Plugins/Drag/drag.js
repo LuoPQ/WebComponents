@@ -1,12 +1,9 @@
 //#region js鎷栨嫿鎻掍欢
 //; (function () {
-    "use strict";
+"use strict";
 
+if (!Array.prototype.indexOf) {
     Array.prototype.indexOf = function (value) {
-
-        if (Array.indexOf) {
-            return this.indexOf(value);
-        }
 
         var i = this.length;
         while (i--) {
@@ -16,115 +13,117 @@
         }
         return -1;
     }
+}
 
-    window.currentDrag = null;
 
-    var dragPara = {
-        mouseX: null,
-        mouseY: null,
-        objX: null,
-        objY: null,
-        zIndex: 1000
-    };
+window.currentDrag = null;
 
-    var noDragTag = ["a", "input", "select", "option", "textarea"];
+var dragPara = {
+    mouseX: null,
+    mouseY: null,
+    objX: null,
+    objY: null,
+    zIndex: 1000
+};
 
-    window.drag = function (eles) {
+var noDragTag = ["a", "input", "select", "option", "textarea"];
 
-        var helper = {
-            //====鍒ゆ柇瀵硅薄鏄惁涓烘暟缁====
-            isArray: function (o) {
-                return Object.prototype.toString.call(o) === '[object Array]';
-            },
-            //====鑾峰彇鍏冪礌鑺傜偣鐨勬牱寮忓睘鎬===
-            getStyle: function (node, styleName) {
-                var realStyle = null;
-                if (node.currentStyle) {
-                    realStyle = node.currentStyle[styleName];
-                } else if (window.getComputedStyle) {
-                    realStyle = window.getComputedStyle(node, null)[styleName];
-                }
-                return realStyle;
-            },
-            //=====鑾峰彇婊氬姩鏉″浜庡乏渚у拰涓婃柟鐨勮窛绂=====
-            getScroll: function () {
-                return {
-                    left: document.documentElement.scrollLeft || document.body.scrollLeft,
-                    top: document.documentElement.scrollTop || document.body.scrollTop
-                }
+window.drag = function (eles) {
+
+    var helper = {
+        //====判断是否是数组====
+        isArray: function (o) {
+            return Object.prototype.toString.call(o) === '[object Array]';
+        },
+        //====获取元素的样式===
+        getStyle: function (node, styleName) {
+            var realStyle = null;
+            if (node.currentStyle) {
+                realStyle = node.currentStyle[styleName];
+            } else if (window.getComputedStyle) {
+                realStyle = window.getComputedStyle(node, null)[styleName];
             }
-        }
-
-        if (helper.isArray(eles)) {
-            for (var i = 0; i < eles.length; i++) {
-                bindEvent(eles[i]);
-            }
-        } else {
-            bindEvent(eles);
-        }
-
-        function bindEvent(ele) {
-
-            ele.onmousedown = function (event) {
-                event = event || window.event;
-
-                var scroll = helper.getScroll();
-
-                dragPara.mouseX = parseInt(event.clientX) + scroll.left;
-                dragPara.mouseY = parseInt(event.clientY) + scroll.top;
-
-                currentDrag = this;
-
-                dragPara.objX = parseInt(helper.getStyle(currentDrag, 'left')) || 0;
-                dragPara.objY = parseInt(helper.getStyle(currentDrag, 'top')) || 0;
-                this.style.zIndex = dragPara.zIndex++;
-            };
-
-            ele.onmouseover = function () {
-                ele.style.cursor = "move";
-            }
-            ele.onmouseout = function () {
-                ele.style.cursor = "default";
-            }
-
-            document.onmouseup = clearDrag;
-            document.onmousemove = move;
-            window.onblur = clearDrag;
-        }
-
-        //====娓呯┖鎷栨嫿瀵硅薄====
-        function clearDrag() {
-            currentDrag = null;
-        }
-
-        //=======绉诲姩榧犳爣瑙﹀彂鐨勬柟娉=====
-        function move(event) {
-            if (currentDrag) {
-                event = event || window.event;
-                var target = event.target || event.srcElement;
-
-                var nodeName = target.nodeName.toLowerCase();
-                if (noDragTag.indexOf(nodeName) > -1) {
-                    return;
-                }
-
-                if (!event) {
-                    currentDrag.onselectstart = function () {
-                        return false;
-                    }
-                }
-                currentDrag.style.position = "absolute";
-                var scroll = helper.getScroll();
-                currentDrag.style.left = parseInt(event.clientX) + scroll.left - dragPara.mouseX + dragPara.objX + "px";
-                currentDrag.style.top = parseInt(event.clientY) + scroll.top - dragPara.mouseY + dragPara.objY + "px";
-
-                //灏唎nmousemove璁剧疆涓簄ull,鎻愰珮鎬ц兘锛屽啀浣跨敤瀹氭椂鍣ㄥ皢浜嬩欢缁戝畾
-                document.onmousemove = null;
-                setTimeout(function () {
-                    document.onmousemove = move;
-                }, 30);
+            return realStyle;
+        },
+        //=====获取元素的滚动距离=====
+        getScroll: function () {
+            return {
+                left: document.documentElement.scrollLeft || document.body.scrollLeft,
+                top: document.documentElement.scrollTop || document.body.scrollTop
             }
         }
     }
+
+    if (helper.isArray(eles)) {
+        for (var i = 0; i < eles.length; i++) {
+            bindEvent(eles[i]);
+        }
+    } else {
+        bindEvent(eles);
+    }
+
+    function bindEvent(ele) {
+
+        ele.onmousedown = function (event) {
+            event = event || window.event;
+
+            var scroll = helper.getScroll();
+
+            dragPara.mouseX = parseInt(event.clientX) + scroll.left;
+            dragPara.mouseY = parseInt(event.clientY) + scroll.top;
+
+            currentDrag = this;
+
+            dragPara.objX = parseInt(helper.getStyle(currentDrag, 'left')) || 0;
+            dragPara.objY = parseInt(helper.getStyle(currentDrag, 'top')) || 0;
+            this.style.zIndex = dragPara.zIndex++;
+        };
+
+        ele.onmouseover = function () {
+            ele.style.cursor = "move";
+        }
+        ele.onmouseout = function () {
+            ele.style.cursor = "default";
+        }
+
+        document.onmouseup = clearDrag;
+        document.onmousemove = move;
+        window.onblur = clearDrag;
+    }
+
+    //====清除拖拽对象====
+    function clearDrag() {
+        currentDrag = null;
+    }
+
+    //=======移动=====
+    function move(event) {
+        if (currentDrag) {
+            event = event || window.event;
+            var target = event.target || event.srcElement;
+
+            var nodeName = target.nodeName.toLowerCase();
+            if (noDragTag.indexOf(nodeName) > -1) {
+                return;
+            }
+
+            if (!event) {
+                currentDrag.onselectstart = function () {
+                    return false;
+                }
+            }
+            currentDrag.style.position = "absolute";
+            var scroll = helper.getScroll();
+            currentDrag.style.left = parseInt(event.clientX) + scroll.left - dragPara.mouseX + dragPara.objX + "px";
+            currentDrag.style.top = parseInt(event.clientY) + scroll.top - dragPara.mouseY + dragPara.objY + "px";
+
+            //延迟调用，提高性能
+            document.onmousemove = null;
+            setTimeout(function () {
+                document.onmousemove = move;
+            }, 30);
+        }
+    }
+}
 //})();
 //#endregion
