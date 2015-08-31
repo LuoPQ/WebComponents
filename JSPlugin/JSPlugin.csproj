@@ -148,6 +148,8 @@
     <Content Include="Plugins\DatePicker\ko.datepicker.js" />
     <Content Include="Plugins\DatePicker\KOBinding.html" />
     <Content Include="Plugins\DatePicker\KODatePicker.html" />
+    <Content Include="Plugins\DatePicker\mobile.datepicker.js" />
+    <Content Include="Plugins\DatePicker\MobileDatePicker.html" />
     <Content Include="Plugins\Dialog\dialog.html" />
     <Content Include="Plugins\Dialog\jquery.dialog.js" />
     <Content Include="Plugins\Dialog\koDialog.html" />
