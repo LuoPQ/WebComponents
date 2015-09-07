@@ -122,6 +122,7 @@
             this.options.maxDate = new Date().parse(this.options.maxDate);
 
             this.renderHtml();
+
         },
         renderHtml: function () {
 
