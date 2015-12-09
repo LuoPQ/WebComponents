@@ -157,6 +157,7 @@
     <Content Include="Plugins\Drag\JSDrag.html" />
     <Content Include="Global.asax" />
     <Content Include="Plugins\OOP\Start.html" />
+    <Content Include="Plugins\Pager\jsPager.html" />
     <Content Include="Plugins\Slide\jQSlide.html" />
     <Content Include="Plugins\Slide\JQSlides.html" />
     <Content Include="Plugins\Slide\jquery.slide.js" />
@@ -176,7 +177,7 @@
     <Content Include="Plugins\DropDownList\jquery.dropdownlist.js" />
     <Content Include="Plugins\Gallery\jQGallery.html" />
     <Content Include="Plugins\Pager\jquery.pager.js" />
-    <Content Include="Plugins\Pager\JSPager.html" />
+    <Content Include="Plugins\Pager\jQueryPager.html" />
     <Content Include="Plugins\Pager\jsPager.js" />
     <Content Include="Plugins\Pager\ko.pager.js" />
     <Content Include="Plugins\Pager\KOPager.html" />
