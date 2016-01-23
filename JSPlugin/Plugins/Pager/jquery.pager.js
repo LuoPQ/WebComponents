@@ -12,8 +12,6 @@
     //思路：生成页码，每次点击页码重新生成所有按钮，而不是改变其中需要改变的按钮
     $.fn.pager = function (options) {
         options = $.extend(defaults, options || {});
-        // return this.each(function () {
-        //     var self = this;
 
         var element = $(this);
 
@@ -39,10 +37,6 @@
             var startIndex = Math.max(0, endIndex - options.maxButtonCount + 1);
 
             //先计算起始页码，通过max计算第一个按钮的页码，注意midPageIndex和pageIndex之间的关系
-            //var startIndex = Math.max(0, tempStartIndex);
-            //startIndex = Math.min(startIndex, options.pageCount, options.maxButtonCount);
-            //var endIndex = Math.min(options.pageCount, startIndex + options.maxButtonCount);
-
             // 第一页
             if (startIndex > 0) {
                 html.push("<a href='" + onGetPageUrl(0) + "' page='" + 0 + "'>1</a> ");
@@ -86,13 +80,13 @@
         }
 
 
-        //声明pager对象
-        function pager() {
+        //声明Pager对象
+        function Pager() {
             renderHtml();
         };
 
         //公开的方法
-        pager.prototype = {
+        Pager.prototype = {
             getPageIndex: function () {
                 return options.pageIndex;
             },
@@ -108,9 +102,7 @@
 
         }
 
-        return new pager();
-        // })
-
+        return new Pager();
     }
 
 })(jQuery);
