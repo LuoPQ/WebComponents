@@ -12,7 +12,11 @@
     //思路：生成页码，每次点击页码重新生成所有按钮，而不是改变其中需要改变的按钮
     $.fn.pager = function (options) {
         options = $.extend(defaults, options || {});
+<<<<<<< HEAD
+        
+=======
 
+>>>>>>> 818ace626748643628b3469557f4cb0dfad3acfe
         var element = $(this);
 
         function renderHtml() {

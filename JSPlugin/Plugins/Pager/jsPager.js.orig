@@ -1,3 +1,22 @@
+<<<<<<< HEAD
+; (function (window, document, undefined) {
+
+    "use strict";
+    var defaults = {
+        pageIndex: 0,
+        pageSize: 6,
+        itemCount: 50,
+        maxButtonCount: 7,
+        prevText: "上一页",
+        nextText: "下一页"
+    };
+
+    window.pager = function () {
+        console.log("test");
+    }
+
+})(window, document)
+=======
 var pageCount = 5;
 
 function refreshFlip(flipType, newPageIndex) {
@@ -84,3 +103,4 @@ $(".pager").on("click", "a", function () {
     $oldCurPage.after($btnPage).remove();
     toReplaceEle.after($newCurPage).remove();
 });
+>>>>>>> 818ace626748643628b3469557f4cb0dfad3acfe
