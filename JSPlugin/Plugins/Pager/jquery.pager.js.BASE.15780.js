@@ -5,14 +5,16 @@
         pageSize: 6,
         itemCount: 50,
         maxButtonCount: 7,
-        prevText: "上一�,
-        nextText: "下一�
+        prevText: "上一页",
+        nextText: "下一页"
     };
 
     //思路：生成页码，每次点击页码重新生成所有按钮，而不是改变其中需要改变的按钮
     $.fn.pager = function (options) {
         options = $.extend(defaults, options || {});
-        
+        // return this.each(function () {
+        //     var self = this;
+
         var element = $(this);
 
         function renderHtml() {
@@ -27,17 +29,21 @@
             }
 
 
-            //这里是关�
-            //临时的起始页码中间页码，当页码数量大于显示的最大按钮数时使�
+            //这里是关键
+            //临时的起始页码中间页码，当页码数量大于显示的最大按钮数时使用
             var tempStartIndex = options.pageIndex - Math.floor(options.maxButtonCount / 2) + 1;
 
             //两种方式计算首尾的页码：
-            //先计算终止页码，通过max计算一排按钮中的第一个按钮的页码，然后计算出页数�
+            //先计算终止页码，通过max计算一排按钮中的第一个按钮的页码，然后计算出页数量
             var endIndex = Math.min(options.pageCount, Math.max(0, tempStartIndex) + options.maxButtonCount) - 1;
             var startIndex = Math.max(0, endIndex - options.maxButtonCount + 1);
 
-            //先计算起始页码，通过max计算第一个按钮的页码，注意midPageIndex和pageIndex之间的关�
-            // 第一�
+            //先计算起始页码，通过max计算第一个按钮的页码，注意midPageIndex和pageIndex之间的关系
+            //var startIndex = Math.max(0, tempStartIndex);
+            //startIndex = Math.min(startIndex, options.pageCount, options.maxButtonCount);
+            //var endIndex = Math.min(options.pageCount, startIndex + options.maxButtonCount);
+
+            // 第一页
             if (startIndex > 0) {
                 html.push("<a href='" + onGetPageUrl(0) + "' page='" + 0 + "'>1</a> ");
                 html.push("<span>...</span>");
@@ -52,7 +58,7 @@
                 }
             }
 
-            // 最后一�
+            // 最后一页
             if (endIndex < options.pageCount - 1) {
                 html.push("<span>...</span> ");
                 html.push("<a href='" + onGetPageUrl(options.pageCount - 1) + "' page='" + (options.pageCount - 1) + "'>" + options.pageCount + "</a> ");
@@ -80,13 +86,13 @@
         }
 
 
-        //声明Pager对象
-        function Pager() {
+        //声明pager对象
+        function pager() {
             renderHtml();
         };
 
-        //公开的方�
-        Pager.prototype = {
+        //公开的方法
+        pager.prototype = {
             getPageIndex: function () {
                 return options.pageIndex;
             },
@@ -102,7 +108,9 @@
 
         }
 
-        return new Pager();
+        return new pager();
+        // })
+
     }
 
 })(jQuery);
