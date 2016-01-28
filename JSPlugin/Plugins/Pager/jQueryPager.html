@@ -18,19 +18,22 @@
         <div class="pager">
 
         </div>
-    </div> <input id="setIndex" value="设置页码" type="button" />
-    <input id="setCount" value="设置数量" type="button" />
-    <script src="../../Scripts/jquery-2.1.3.min.js"></script>
+    </div>
+    <input id="setIndex" value="设置页码为3（第4页）" type="button" />
+    <input id="getIndex" value="获取当前页码" type="button" />
+    <input id="setCount" value="设置项数为100" type="button" />
+    <script src="http://luopq.com/demo/lib/jquery-1.10.2.min.js"></script>
     <script src="jquery.pager.js"></script>
     <script>
-
-
         var pager = $(".pager").pager();
         $("#setIndex").on("click", function () {
             pager.setPageIndex(3);
         })
+        $("#getIndex").on("click", function () {
+            alert(pager.getPageIndex(3));
+        })
         $("#setCount").on("click", function () {
-            pager.setItemCount(10);
+            pager.setItemCount(100);
         })
     </script>
 </body>
